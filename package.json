@@ -1,0 +1,26 @@
+{
+    "name": "statherobot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js",
+        "bot": "node bot.js",
+        "bot:dev": "nodemon bot.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^16.4.7",
+        "express": "^5.1.0",
+        "log4js": "^6.9.1",
+        "node-telegram-bot-api": "^0.66.0",
+        "pg": "^8.14.1",
+        "sequelize": "^6.37.7"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    }
+}
