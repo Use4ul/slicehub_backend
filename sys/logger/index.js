@@ -22,9 +22,9 @@ log4js.configure({
                 pattern: layoutPattern,
             },
         },
-        database: {
+        db: {
             type,
-            filename: path.join(__dirname, '../../logs/dataBase' + TODAY),
+            filename: path.join(__dirname, '../../logs/db' + TODAY),
             maxLogSize,
             backups,
             layout: {
@@ -45,13 +45,13 @@ log4js.configure({
     },
     categories: {
         default: { appenders: ['console', 'main'], level: 'info' },
-        database: { appenders: ['database'], level: 'debug' },
+        database: { appenders: ['db'], level: 'debug' },
         sync: { appenders: ['sync', 'console'], level: 'info' },
     },
 });
 
 module.exports = {
     mainLogger: log4js.getLogger(),
-    dataBaseLogger: log4js.getLogger('database'),
+    loggerDB: log4js.getLogger('db'),
     syncLogger: log4js.getLogger('sync'),
 };
