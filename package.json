@@ -18,7 +18,9 @@
         "log4js": "^6.9.1",
         "node-telegram-bot-api": "^0.66.0",
         "pg": "^8.14.1",
-        "sequelize": "^6.37.7"
+        "pidusage": "^4.0.1",
+        "sequelize": "^6.37.7",
+        "ws": "^8.18.3"
     },
     "devDependencies": {
         "nodemon": "^3.1.9"
