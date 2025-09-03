@@ -338,6 +338,9 @@ const html = `
         <div class="header">
             <h1>🚀 Node.js Core Monitoring</h1>
             <p>Real-time performance monitoring</p>
+            <div id="connection-status" style="margin-top: 10px; padding: 5px; border-radius: 4px; background: var(--bg-tertiary); text-align: center; font-size: 0.9rem;">
+                Сonnecting to server...
+             </div>
         </div>
         
         <!-- Большой график текущего ядра -->
@@ -472,7 +475,8 @@ const scripts = `
             }
         });
         
-        const ws = new WebSocket('ws://' + window.location.host + '/ws/cpu');
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(protocol + '//' + window.location.host + '/ws/cpu');
         
         ws.onmessage = function(event) {
             try {
@@ -590,12 +594,23 @@ const scripts = `
         }
         
         // Обработка ошибок WebSocket
+
+        ws.onopen = function() {
+            document.getElementById('connection-status').textContent = 'Connected ✓';
+            document.getElementById('connection-status').style.background = '#166534';
+            document.getElementById('connection-status').style.color = 'white';
+        };
+
         ws.onerror = function(error) {
-            console.error('WebSocket error:', error);
+            document.getElementById('connection-status').textContent = 'Connection error ❌';
+            document.getElementById('connection-status').style.background = '#dc2626';
+            document.getElementById('connection-status').style.color = 'white';
         };
         
         ws.onclose = function() {
-            console.log('WebSocket connection closed');
+            document.getElementById('connection-status').textContent = 'Disconnected ⚠️';
+            document.getElementById('connection-status').style.background = '#ea580c';
+            document.getElementById('connection-status').style.color = 'white';
         };
 `;
 

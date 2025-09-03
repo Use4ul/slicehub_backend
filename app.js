@@ -21,7 +21,7 @@ const bootstrap = async () => {
     try {
         mainLogger.info(`Starting bootstrap func...`);
         startApp();
-        await initDB();
+        // await initDB();
 
         setupCpuMonitor(server);
         mainLogger.info(
