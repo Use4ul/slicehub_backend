@@ -1,5 +1,8 @@
 const conf = require('../../conf.json');
 const appName = conf.appName || 'App';
+const reqInterval = conf.monitoringSettings?.reqInterval || 1000;
+const x_seconds = conf.monitoringSettings?.x_seconds || 60;
+const barNumber = Math.round((Math.min(x_seconds, 120) * 1000) / reqInterval);
 
 const css = `
         /* Сброс стилей */
@@ -11,7 +14,7 @@ const css = `
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
             --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
+            --text-secondary: #ffffff;
             --accent-primary: #22c55e;
             --accent-secondary: #3b82f6;
             --accent-warning: #f59e0b;
@@ -27,6 +30,11 @@ const css = `
             line-height: 1.6;
             min-height: 100vh;
             padding: 0;
+        }
+
+        span {
+            color: #ffffff;
+            font-weight: bold;
         }
         
         .container {
@@ -74,10 +82,12 @@ const css = `
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             border: 1px solid var(--bg-tertiary);
+            margin-bottom: 20px;
         }
         
         .card-large {
             grid-column: 1 / -1;
+            margin-bottom: 20px;
         }
         
         .card h3 {
@@ -210,17 +220,18 @@ const css = `
             height: 100%;
             display: flex;
             align-items: flex-end;
-            gap: 2px;
+            gap: 1px; /* Уменьшили для 60 столбцов */
             position: relative;
         }
         
         .chart-bar {
             flex: 1;
             background: linear-gradient(to top, var(--accent-primary), var(--accent-secondary));
-            border-radius: 2px 2px 0 0;
+            border-radius: 1px 1px 0 0; /* Меньшее скругление */
             transition: height 0.3s ease;
             min-height: 1px;
             position: relative;
+            min-width: 1px; /* Минимальная ширина */
         }
         
         .chart-axis {
@@ -255,7 +266,8 @@ const css = `
         
         .chart-y-labels {
             position: absolute;
-            left: -35px;
+            left: 0px;
+            px;
             top: 0;
             bottom: 0;
             display: flex;
@@ -275,6 +287,7 @@ const css = `
             text-align: center;
             color: var(--text-secondary);
             font-size: 0.8rem;
+            font-weight: bold; 
             margin-top: 5px;
         }
         
@@ -308,6 +321,27 @@ const css = `
             background: var(--accent-warning);
         }
         
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .simple-chart {
+                gap: 0.5px;
+            }
+            
+            .chart-bar {
+                min-width: 0.5px;
+                border-radius: 0.5px 0.5px 0 0;
+            }
+            
+            .chart-y-labels {
+                left: -25px;
+                font-size: 0.6rem;
+            }
+            
+            .chart-labels {
+                font-size: 0.65rem;
+            }
+        }
+        
         /* Улучшенная прокрутка */
         html {
             scroll-behavior: smooth;
@@ -336,7 +370,7 @@ const css = `
 const html = `
     <div class="container">
         <div class="header">
-            <h1>🚀 Node.js Core Monitoring</h1>
+            <h1>Node.js Core Monitoring</h1>
             <p>Real-time performance monitoring</p>
             <div id="connection-status" style="margin-top: 10px; padding: 5px; border-radius: 4px; background: var(--bg-tertiary); text-align: center; font-size: 0.9rem;">
                 Сonnecting to server...
@@ -345,7 +379,7 @@ const html = `
         
         <!-- Большой график текущего ядра -->
         <div class="card card-large current-core-highlight">
-            <h3>⭐ Current Execution Core</h3>
+            <h3>Current Execution Core</h3>
             <div id="current-core-info">
                 <div class="stat-value" id="current-core-value">0%</div>
                 <div class="stat-label" id="current-core-label">Core #0</div>
@@ -356,10 +390,10 @@ const html = `
             <div class="chart-container">
                 <div class="chart-y-labels">
                     <div class="chart-y-label">100%</div>
-                    <div class="chart-y-label">75%</div>
-                    <div class="chart-y-label">50%</div>
-                    <div class="chart-y-label">25%</div>
-                    <div class="chart-y-label">0%</div>
+                    <div class="chart-y-label"></div>
+                    <div class="chart-y-label"></div>
+                    <div class="chart-y-label"></div>
+                    <div class="chart-y-label"></div>
                 </div>
                 <div class="simple-chart" id="current-core-chart"> 
                     <div class="chart-axis-x"></div>
@@ -367,7 +401,7 @@ const html = `
                 </div>
             </div>
             <div class="chart-labels">
-                <span>← 20s ago</span>
+                <span>← Time ${x_seconds}s ago</span>
                 <span>Now →</span>
             </div>
             <div class="chart-title">CPU Usage Over Time</div>
@@ -376,13 +410,13 @@ const html = `
         <div class="grid">
             <!-- Общая загрузка CPU -->
             <div class="card">
-                <h3>📊 Total CPU Usage</h3>
+                <h3>📊 Total CPU Usage </h3>
                 <div class="stat-value" id="total-cpu-value">0%</div>
                 <div class="chart-container">
                     <div class="chart-y-labels">
                         <div class="chart-y-label">100%</div>
-                        <div class="chart-y-label">50%</div>
-                        <div class="chart-y-label">0%</div>
+                        <div class="chart-y-label"></div>
+                        <div class="chart-y-label"></div>
                     </div>
                     <div class="simple-chart" id="total-cpu-chart">
                         <div class="chart-axis-x"></div>
@@ -390,8 +424,8 @@ const html = `
                     </div>
                 </div>
                 <div class="chart-labels">
-                    <span>← Time</span>
-                    <span>→</span>
+                    <span>← Time ${x_seconds}s ago</span>
+                    <span>Now →</span>
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item">
@@ -403,13 +437,13 @@ const html = `
             
             <!-- Event Loop Lag -->
             <div class="card">
-                <h3>⏰ Event Loop Lag</h3>
+                <h3>⏰ Event Loop Lag </h3>
                 <div class="stat-value" id="event-loop-value">0ms</div>
                 <div class="chart-container">
                     <div class="chart-y-labels">
                         <div class="chart-y-label">100ms</div>
-                        <div class="chart-y-label">50ms</div>
-                        <div class="chart-y-label">0ms</div>
+                        <div class="chart-y-label"></div>
+                        <div class="chart-y-label"></div>
                     </div>
                     <div class="simple-chart" id="event-loop-chart">
                         <div class="chart-axis-x"></div>
@@ -417,12 +451,12 @@ const html = `
                     </div>
                 </div>
                 <div class="chart-labels">
-                    <span>← Time</span>
-                    <span>→</span>
+                    <span>← Time ${x_seconds}s ago</span>
+                    <span>Now →</span>
                 </div>
                 <div class="chart-legend">
                     <div class="legend-item">
-                        <div class="legend-color legend-lag"></div>
+                        <div class="legend-color legend-cpu"></div>
                         <span>Lag (ms)</span>
                     </div>
                 </div>
@@ -466,7 +500,8 @@ const scripts = `
             chart.element.innerHTML = '';
             axes.forEach(axis => chart.element.appendChild(axis));
             
-            for (let i = 0; i < 20; i++) {
+            // 60 столбцов вместо 20
+            for (let i = 0; i < ${barNumber}; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'chart-bar';
                 bar.style.height = '0%';
@@ -492,10 +527,10 @@ const scripts = `
                     // Для Event Loop используем динамический максимум
                     const currentLag = parseFloat(data.data.eventLoop.currentLag);
                     charts.eventLoop.maxValue = Math.max(100, currentLag * 1.5);
-                    updateSimpleChart(charts.eventLoop, currentLag);
+                    updateSimpleChart(charts.eventLoop, currentLag, "eventloop");
                     
                     document.getElementById('total-cpu-value').textContent = data.data.totalCpuUsage.toFixed(1) + '%';
-                    document.getElementById('event-loop-value').textContent = data.data.eventLoop.currentLag + 'ms';
+                    document.getElementById('event-loop-value').textContent = data.data.eventLoop.currentLag + 'ms(*10)';
                     
                     // Обновляем статистику
                     updateCoresStats(data.data.cores);
@@ -522,7 +557,7 @@ const scripts = `
             }
         }
         
-        function updateSimpleChart(chart, value) {
+        function updateSimpleChart(chart, value, type = "") {
             // Сдвигаем данные
             chart.data.push(value);
             chart.data.shift();
@@ -530,7 +565,10 @@ const scripts = `
             // Обновляем бары
             const bars = chart.element.querySelectorAll('.chart-bar');
             for (let i = 0; i < bars.length; i++) {
-                const height = (chart.data[i] / chart.maxValue) * 100;
+                let height = (chart.data[i] / chart.maxValue) * 100;
+                if(type === "eventloop") {
+                    height = height * 100;
+                }
                 bars[i].style.height = Math.max(height, 1) + '%';
             }
         }
@@ -540,24 +578,16 @@ const scripts = `
             let html = '';
             
             cores.forEach(function(core) {
-                const usageClass = core.usage > 70 ? 'badge-danger' : 
-                                 core.usage > 30 ? 'badge-warning' : '';
-                
+                const usageClass = core.usage > 70 ? 'badge-danger' : core.usage > 30 ? 'badge-warning' : '';
                 html += '<div class="core-item ' + (core.isCurrent ? 'current' : '') + '">';
                 html += '<div class="stat-value">' + core.usage.toFixed(1) + '%</div>';
-                html += '<div class="stat-label">Core ' + core.core + '</div>';
+                html += '<div class="stat-label">Core ' + '#' + core.core + '</div>';
                 html += '<div class="progress-bar">';
                 html += '<div class="progress-fill" style="width: ' + core.usage + '%"></div>';
                 html += '</div>';
-                if (core.isCurrent) {
-                    html += '<div class="badge badge-current">CURRENT</div>';
-                }
-                if (usageClass) {
-                    html += '<div class="badge ' + usageClass + '">' + (core.usage > 70 ? 'HIGH' : 'MED') + '</div>';
-                }
                 html += '</div>';
             });
-            
+
             container.innerHTML = html;
         }
         

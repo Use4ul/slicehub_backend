@@ -1,8 +1,11 @@
 const WebSocket = require('ws');
 const { mainLogger } = require('../../sys/logger');
 const monitorService = require('./service');
+const conf = require('../../conf.json');
 
-function setupCpuMonitor(server) {
+const reqInterval = conf.monitoringSettings?.reqInterval || 1000;
+
+function setupCpuMonitoring(server) {
     const wss = new WebSocket.Server({ server, path: '/ws/cpu' });
 
     wss.on('connection', (ws) => {
@@ -21,7 +24,7 @@ function setupCpuMonitor(server) {
             } catch (error) {
                 mainLogger.error('Error sending WebSocket data:', error.message);
             }
-        }, 1000);
+        }, reqInterval);
 
         ws.on('close', () => {
             mainLogger.info('Client disconnected from CPU monitor');
@@ -51,4 +54,4 @@ function setupCpuMonitor(server) {
     return wss;
 }
 
-module.exports = setupCpuMonitor;
+module.exports = setupCpuMonitoring;

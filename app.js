@@ -5,7 +5,7 @@ const { mainLogger } = require('./sys/logger');
 const initDB = require('./db/init');
 
 // Импортируем мониторинг
-const { monitoringRouter, setupCpuMonitor } = require('./routes/monitoring');
+const { monitoringRouter, setupCpuMonitoring } = require('./routes/monitoring');
 
 const app = express();
 const server = http.createServer(app);
@@ -23,7 +23,7 @@ const bootstrap = async () => {
         startApp();
         // await initDB();
 
-        setupCpuMonitor(server);
+        setupCpuMonitoring(server);
         mainLogger.info(
             '\n',
             '🏠 Monitoring:',

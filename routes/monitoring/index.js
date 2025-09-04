@@ -1,15 +1,14 @@
-const router = require('./controller');
-const setupCpuMonitor = require('./websocket');
-const monitorService = require('./service');
+const monitoringRouter = require('./controller');
+const setupCpuMonitoring = require('./websocket');
+const { monitoringEventLoop, getCoresInfo } = require('./service');
 
 // Запускаем мониторинг Event Loop
-setInterval(monitorService.monitorEventLoop, 100);
+setInterval(monitoringEventLoop, 100);
 
 // Инициализируем начальные данные CPU
-monitorService.getCoresInfo();
+getCoresInfo();
 
 module.exports = {
-    monitoringRouter: router,
-    setupCpuMonitor,
-    monitorService,
+    monitoringRouter,
+    setupCpuMonitoring
 };
