@@ -1,9 +1,9 @@
-const { loggerDB } = require('../sys/logger');
+import { loggerDB } from '../sys/logger';
 
 /**
  * Инициализирует базу данных (синхронизация + заполнение тестовыми данными)
  */
-const initDB = async () => {
+export const initDB = async (): Promise<boolean> => {
     try {
         loggerDB.info('Starting database initialization...');
         /*
@@ -13,11 +13,11 @@ const initDB = async () => {
         return true;
     } catch (error) {
         loggerDB.error('Database initialization failed:', {
-            message: error.message,
-            stack: error.stack,
+            message: (error as Error).message,
+            stack: (error as Error).stack,
         });
         throw error;
     }
 };
 
-module.exports = initDB;
+export default initDB;

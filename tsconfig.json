@@ -17,11 +17,6 @@
             "*": ["node_modules/*"]
         }
     },
-    "include": [
-        "app.ts",
-        "src/**/*",
-        "sys/**/*", // добавьте эту строку
-        "types/**/*" // добавьте эту строку
-    ],
+    "include": ["app.ts", "src/**/*", "sys/**/*", "types/**/*", "db/**/*"],
     "exclude": ["node_modules", "dist"]
 }

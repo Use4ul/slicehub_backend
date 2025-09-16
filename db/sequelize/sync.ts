@@ -1,12 +1,12 @@
-const config = require('../../config.json');
-const { syncLogger, loggerDB } = require('../../sys/logger');
-const { dbConnection } = require('./index');
+import { SyncOptions } from 'sequelize';
+import { syncLogger, loggerDB } from '../../sys/logger';
+import { dbConnection } from './index';
 
-module.exports = async (options = {}) => {
-    const defaultOptions = {
+export const syncDatabase = async (options: SyncOptions = {}): Promise<boolean> => {
+    const defaultOptions: SyncOptions = {
         alter: process.env.NODE_ENV === 'development',
         force: false,
-        logging: (sql, timing) => {
+        logging: (sql: string, timing?: number) => {
             loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
         },
     };
@@ -23,3 +23,5 @@ module.exports = async (options = {}) => {
         throw error;
     }
 };
+
+export default syncDatabase;
