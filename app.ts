@@ -4,10 +4,9 @@ import express, { Express } from 'express';
 
 import conf from './conf.json';
 import { monitoringRouter, setupCpuMonitoring } from './src/routes/monitoring';
-import { mainLogger } from './sys/logger'; // Путь изменен
-// import initDB from './db/init';
+import { mainLogger } from './sys/logger';
+import initDB from './db/init';
 
-// Импортируем мониторинг
 
 interface Settings {
     port: number;
@@ -33,7 +32,7 @@ const bootstrap = async (): Promise<void> => {
     try {
         mainLogger.info(`Starting bootstrap func...`);
         startApp();
-        // await initDB();
+        await initDB();
 
         setupCpuMonitoring(server);
         mainLogger.info(
