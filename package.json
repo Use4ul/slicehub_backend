@@ -4,10 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node app.js",
-        "dev": "nodemon app.js",
-        "bot": "node bot.js",
-        "bot:dev": "nodemon bot.js"
+        "dev": "nodemon app.ts",
+        "build": "tsc",
+        "start": "node dist/app.js",
+        "lint": "eslint . --ext .ts,.js",
+        "lint:fix": "eslint . --ext .ts,.js --fix",
+        "lint:watch": "eslint . --ext .ts,.js --watch"
     },
     "keywords": [],
     "author": "",
@@ -23,6 +25,22 @@
         "ws": "^8.18.3"
     },
     "devDependencies": {
-        "nodemon": "^3.1.9"
+        "@eslint/js": "^9.35.0",
+        "@types/express": "^5.0.3",
+        "@types/node": "^24.5.0",
+        "@types/ws": "^8.18.1",
+        "@typescript-eslint/eslint-plugin": "^8.44.0",
+        "@typescript-eslint/parser": "^8.44.0",
+        "eslint": "^9.35.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-promise": "^7.2.1",
+        "globals": "^16.4.0",
+        "nodemon": "^3.1.10",
+        "prettier": "^3.6.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.2"
     }
 }

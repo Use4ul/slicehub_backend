@@ -1,39 +1,38 @@
-const WebSocket = require('ws');
-const { mainLogger } = require('../../sys/logger');
-const monitorService = require('./service');
+import * as http from 'http';
 
-function setupCpuMonitor(server) {
+import WebSocket from 'ws';
+
+import conf from '../../../conf.json';
+import { mainLogger } from '../../../sys/logger';
+
+import * as monitorService from './service';
+
+const reqInterval = (conf as any).monitoringSettings?.reqInterval || 1000;
+
+export default function setupCpuMonitoring(server: http.Server): void {
     const wss = new WebSocket.Server({ server, path: '/ws/cpu' });
 
-    wss.on('connection', (ws) => {
+    wss.on('connection', (ws: WebSocket) => {
         mainLogger.info('Client connected to CPU monitor');
-
         const interval = setInterval(() => {
             try {
                 const data = monitorService.getMonitorData();
-
-                ws.send(
-                    JSON.stringify({
-                        type: 'cpu_usage',
-                        data: data,
-                    })
-                );
+                ws.send(JSON.stringify({ type: 'cpu_usage', data }));
             } catch (error) {
-                mainLogger.error('Error sending WebSocket data:', error.message);
+                mainLogger.error('Error sending WebSocket data:', (error as Error).message);
             }
-        }, 1000);
+        }, reqInterval);
 
         ws.on('close', () => {
             mainLogger.info('Client disconnected from CPU monitor');
             clearInterval(interval);
         });
 
-        ws.on('error', (error) => {
+        ws.on('error', (error: Error) => {
             mainLogger.error('WebSocket error:', error.message);
             clearInterval(interval);
         });
 
-        // Отправляем приветственное сообщение
         ws.send(
             JSON.stringify({
                 type: 'connected',
@@ -43,12 +42,9 @@ function setupCpuMonitor(server) {
         );
     });
 
-    wss.on('error', (error) => {
+    wss.on('error', (error: Error) => {
         mainLogger.error('WebSocket server error:', error.message);
     });
 
     mainLogger.info('WebSocket CPU monitor initialized');
-    return wss;
 }
-
-module.exports = setupCpuMonitor;
