@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "commonjs",
+        "lib": ["ES2020"],
+        "outDir": "./dist",
+        "rootDir": "./",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "strict": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": ["node_modules/*"]
+        }
+    },
+    "include": [
+        "app.ts",
+        "src/**/*",
+        "sys/**/*", // добавьте эту строку
+        "types/**/*" // добавьте эту строку
+    ],
+    "exclude": ["node_modules", "dist"]
+}
