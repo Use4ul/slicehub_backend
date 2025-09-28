@@ -16,7 +16,7 @@ export class FileType extends Model<FileTypeAttributes, FileTypeCreationAttribut
 
   static initialize(sequelize: Sequelize) {
     return FileType.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       description: { type: DataTypes.TEXT, allowNull: false },
       extension: { type: DataTypes.STRING(16), allowNull: false, unique: true },
     }, {

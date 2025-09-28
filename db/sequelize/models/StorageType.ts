@@ -18,7 +18,7 @@ export class StorageType extends Model<StorageTypeAttributes, StorageTypeCreatio
 
   static initialize(sequelize: Sequelize) {
     return StorageType.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING(20), allowNull: false, unique: true },
       description: { type: DataTypes.TEXT, allowNull: false },
       requires_url_processing: { type: DataTypes.BOOLEAN, allowNull: false },

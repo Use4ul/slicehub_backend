@@ -24,7 +24,7 @@ export class AuthProvider extends Model<AuthProviderAttributes, AuthProviderCrea
 
   static initialize(sequelize: Sequelize) {
     return AuthProvider.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING(32), allowNull: false, unique: true },
       display_name: { type: DataTypes.STRING(32), allowNull: false },
       is_enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },

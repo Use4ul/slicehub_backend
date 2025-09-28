@@ -8,7 +8,7 @@ const router = Router();
 
 // Health check endpoint
 router.get('/healthcheck', async (req: Request, res: Response) => {
-    const data = await Models.Users.findAll()
+    const data = await Models.User.findAll()
     res.json({
         status: 'healthy',
         timestamp: new Date().toISOString(),

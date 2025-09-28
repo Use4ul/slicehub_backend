@@ -1,11 +1,16 @@
-import { SyncOptions } from 'sequelize';
 import { syncLogger, loggerDB } from '../../sys/logger';
+import { Configuration } from '../../src/types/config';
+import { SyncOptions } from 'sequelize';
 import { dbConnection } from './index';
+import conf from '../../conf.json';
+
+const config = conf as Configuration;
 
 export const syncDatabase = async (options: SyncOptions = {}): Promise<boolean> => {
+    
     const defaultOptions: SyncOptions = {
-        alter: process.env.NODE_ENV === 'development',
-        force: false,
+        alter: config.syncOptions?.alter,
+        force: config.syncOptions?.forсe || false,
         logging: (sql: string, timing?: number) => {
             loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
         },
