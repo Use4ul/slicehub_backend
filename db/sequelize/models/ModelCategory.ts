@@ -5,30 +5,30 @@ interface ModelCategoryAttributes {
   id: number;
   name: string;
   description: string;
-  parent_id?: number;
-  slug: string;
+  parent_id: number | null;
+  slug: string | null;
   is_active: boolean;
   sort_order: number;
 }
 
-interface ModelCategoryCreationAttributes extends Optional<ModelCategoryAttributes, 'id'> {}
+interface ModelCategoryCreationAttributes extends Optional<ModelCategoryAttributes, 'id' | 'is_active' | 'sort_order'> {}
 
 export class ModelCategory extends Model<ModelCategoryAttributes, ModelCategoryCreationAttributes> implements ModelCategoryAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
-  public parent_id?: number;
-  public slug!: string;
+  declare parent_id: number | null;
+  declare slug: string | null;
   public is_active!: boolean;
-  public sort_order!: number;
+  declare sort_order: number;
 
   static initialize(sequelize: Sequelize) {
     return ModelCategory.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
       name: { type: DataTypes.STRING(255), allowNull: false, unique: true },
       description: { type: DataTypes.TEXT, allowNull: false },
-      parent_id: { type: DataTypes.INTEGER, allowNull: true },
-      slug: { type: DataTypes.STRING(255), allowNull: false },
+      parent_id: { type: DataTypes.INTEGER, allowNull: true, defaultValue: null },
+      slug: { type: DataTypes.STRING(255), allowNull: true },
       is_active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
       sort_order: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
     }, {

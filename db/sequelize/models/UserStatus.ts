@@ -22,7 +22,7 @@ export class UserStatus extends Model<UserStatusAttributes, UserStatusCreationAt
 
   static initialize(sequelize: Sequelize) {
     return UserStatus.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING(16), allowNull: false, unique: true },
       description: { type: DataTypes.STRING(128), allowNull: false },
       allows_login: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },

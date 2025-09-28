@@ -18,7 +18,7 @@ export class Role extends Model<RoleAttributes, RoleCreationAttributes> implemen
 
   static initialize(sequelize: Sequelize) {
     return Role.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING(32), allowNull: false, unique: true },
       description: { type: DataTypes.TEXT, allowNull: false },
       created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')},

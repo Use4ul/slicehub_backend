@@ -1,12 +1,12 @@
 import * as http from 'http';
 
-import express, { Express } from 'express';
+import express, { Express, Router, Request, Response, response } from 'express';
 
 import conf from './conf.json';
-import { monitoringRouter, setupCpuMonitoring } from './src/routes/monitoring';
 import { mainLogger } from './sys/logger';
+import { monitoringRouter, setupCpuMonitoring } from './src/routes/monitoring';
 import initDB from './db/init';
-
+import Models, {dbConnection} from './db/sequelize';
 
 interface Settings {
     port: number;
@@ -22,11 +22,29 @@ const app: Express = express();
 const server = http.createServer(app);
 const PORT = config.settings.port || parseInt(process.env.PORT || '3000', 10);
 
+// Здесь объясвялем все нужные глобальные роутеры
+const mainRouter = Router();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// mainRouter.get('/city', async (req: Request, res: Response) => {
+//     try {
+//         const data = await Models.City.findAll({where: {id: 1}});
+//         const value = data[0].id
+//         const test = await dbConnection.query('SELECT * FROM roles')
+//         console.log(test);
+        
+//         return res.status(200).json({data, roles: test})
+//     } catch (error) {
+        
+//     }
+// });
+
 // Подключаем роут мониторинга
 app.use('/monitoring', monitoringRouter);
+app.use('/main', mainRouter);
+
 
 const bootstrap = async (): Promise<void> => {
     try {

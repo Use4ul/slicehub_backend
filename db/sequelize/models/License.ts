@@ -12,7 +12,7 @@ interface LicenseAttributes {
   is_active: boolean;
 }
 
-interface LicenseCreationAttributes extends Optional<LicenseAttributes, 'id'> {}
+interface LicenseCreationAttributes extends Optional<LicenseAttributes, 'id' | 'allows_commercial_use' | 'allows_modification' | 'requires_attribution' | 'is_active'> {}
 
 export class License extends Model<LicenseAttributes, LicenseCreationAttributes> implements LicenseAttributes {
   public id!: number;
@@ -26,7 +26,7 @@ export class License extends Model<LicenseAttributes, LicenseCreationAttributes>
 
   static initialize(sequelize: Sequelize) {
     return License.init({
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       name: { type: DataTypes.STRING(255), allowNull: false },
       description: { type: DataTypes.TEXT, allowNull: false },
       url: { type: DataTypes.TEXT, allowNull: true },

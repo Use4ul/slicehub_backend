@@ -1,9 +1,8 @@
 import conf from '../../conf.json';
-import path from 'path';
-import fs from 'fs';
 import { Sequelize, DataTypes } from 'sequelize';
 import { loggerDB } from '../../sys/logger';
 import { Configuration } from '../../src/types/config';
+import { initializeModels } from './models';
 
 const config = conf as unknown as Configuration;
 
@@ -13,19 +12,22 @@ if (!config.DB || !config.auth) {
 }
 
 const dbName = config.settings.database;
+
 if (!dbName) throw new Error('Database name not specified in settings.database');
 
 const dbSettings = config.DB[dbName];
+
 if (!dbSettings) throw new Error(`Database settings for ${dbName} not found in config.DB`);
 
 const auth = config.auth[dbSettings.user];
+
 if (!auth) throw new Error(`Auth settings for user ${dbSettings.user} not found in config.auth`);
 
 // Инициализация Sequelize
 const dbConnection = new Sequelize(dbSettings.database, auth.login, auth.password, {
     host: dbSettings.host,
     port: typeof dbSettings.port === 'string' ? parseInt(dbSettings.port) : dbSettings.port,
-    dialect: dbSettings.dialect as 'postgres' | 'mysql' | 'sqlite' | 'mssql',
+    dialect: dbSettings.dialect as 'postgres',
     logging: dbSettings.logging ? (sql: string, timing?: number) => {
         loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
     } : false,
@@ -38,42 +40,7 @@ const dbConnection = new Sequelize(dbSettings.database, auth.login, auth.passwor
     },
 });
 
-// Автоматический импорт моделей
-const models: { [key: string]: any } = {};
-const modelsPath = path.join(__dirname, './models');
-
-if (fs.existsSync(modelsPath)) {
-    fs.readdirSync(modelsPath)
-        .filter((file) => 
-            (file.endsWith('.ts') || file.endsWith('.js')) && 
-            !file.endsWith('.d.ts') && 
-            file !== 'index.ts' && 
-            file !== 'index.js'
-        )
-        .forEach((file) => {
-            try {
-                const modelName = path.basename(file, path.extname(file));
-                const modelPath = path.join(modelsPath, file);
-                const modelModule = require(modelPath);
-                
-                // Для моделей с классом и методом initialize
-                const ModelClass = modelModule.default || modelModule;
-                if (ModelClass && typeof ModelClass.initialize === 'function') {
-                    const model = ModelClass.initialize(dbConnection);
-                    models[modelName] = model;
-                }
-            } catch (error) {
-                loggerDB.error(`Error loading model ${file}:`, error);
-            }
-        });
-}
-
-// Установка ассоциаций
-Object.values(models).forEach((model) => {
-    if (model.associate && typeof model.associate === 'function') {
-        model.associate(models);
-    }
-});
+const Models = initializeModels(dbConnection);
 
 // Функция для проверки подключения
 export const authenticateDB = async (): Promise<void> => {
@@ -86,6 +53,5 @@ export const authenticateDB = async (): Promise<void> => {
     }
 };
 
-// Экспортируем модели и соединение
-export { models, dbConnection, DataTypes };
-export default models;
+export { dbConnection }; // коннектор для прямого SQL
+export default Models;

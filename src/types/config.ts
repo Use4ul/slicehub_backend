@@ -48,4 +48,10 @@ export interface Configuration {
         [key: string]: DatabaseAuth;
     };
     monitoringSettings?: MonitoringSettings;
+    syncOptions: SyncOptions;
+}
+
+export interface SyncOptions {
+    forсe: boolean;
+    alter: boolean;
 }
