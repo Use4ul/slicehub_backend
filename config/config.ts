@@ -1,19 +1,6 @@
-export interface DatabaseConfig {
-    host: string;
-    port: number;
-    name: string;
-    user: string;
-    password: string;
-}
-
-export interface LoggingConfig {
-    level: string;
-    file?: string;
-}
-
 export interface Settings {
     port: number;
-    database?: string; // Изменено на string, чтобы соответствовать conf.json
+    database?: string;
     logging?: LoggingConfig;
     osType?: string;
 }
@@ -35,23 +22,33 @@ export interface DatabaseAuth {
     password: string;
 }
 
-export interface MonitoringSettings {
-    reqInterval?: number;
+export interface LoggingConfig {
+    level: string;
+    file?: string;
 }
 
-export interface Configuration {
-    settings: Settings;
-    DB?: {
-        [key: string]: DatabaseSettings;
-    };
-    auth?: {
-        [key: string]: DatabaseAuth;
-    };
-    monitoringSettings?: MonitoringSettings;
-    syncOptions: SyncOptions;
+export interface MonitoringSettings {
+    reqInterval?: number;
+    x_seconds?: number;
+    coreUpdate?: number;
+    osType?: string;
 }
 
 export interface SyncOptions {
     forсe: boolean;
     alter: boolean;
+}
+
+export interface Configuration {
+    appName: string;
+    settings: Settings;
+    DB: {
+        [key: string]: DatabaseSettings;
+    };
+    auth: {
+        [key: string]: DatabaseAuth;
+    };
+    monitoringSettings?: MonitoringSettings;
+    syncOptions: SyncOptions;
+    devUsers: string[];
 }

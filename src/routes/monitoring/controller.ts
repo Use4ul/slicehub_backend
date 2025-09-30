@@ -1,24 +1,24 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from "express";
 
-import { htmlPage } from './htmlReady';
+import { htmlPage } from "./htmlReady";
 
-import Models from '../../../db/sequelize';
+import Models from "../../../db/sequelize";
 
 const router = Router();
 
 // Health check endpoint
-router.get('/healthcheck', async (req: Request, res: Response) => {
-    const data = await Models.User.findAll()
+router.get("/healthcheck", async (req: Request, res: Response) => {
+    const data = await Models.User.findAll();
     res.json({
-        status: 'healthy',
+        status: "healthy",
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        testData: data
+        testData: data,
     });
 });
 
 // Статическая страница мониторинга
-router.get('/ui', (req: Request, res: Response) => {
+router.get("/ui", (req: Request, res: Response) => {
     res.send(htmlPage);
 });
 

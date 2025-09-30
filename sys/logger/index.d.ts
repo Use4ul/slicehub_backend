@@ -1,4 +1,4 @@
-import * as log4js from 'log4js';
+import * as log4js from "log4js";
 
 // Просто расширяем оригинальный интерфейс
 export interface Logger extends log4js.Logger {}

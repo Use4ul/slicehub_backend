@@ -1,20 +1,18 @@
-import { syncLogger } from '../../../sys/logger';
+import { syncLogger } from "../../../sys/logger";
 
-import { rolesSeed } from '../seeds/roles.seeds';
-import { userStatusesSeed } from '../seeds/userStatuses.seeds';
-import { storageTypesSeed } from '../seeds/storageTypes.seeds';
-import { tokenTypesSeed } from '../seeds/tokenTypes.seeds';
-import { countriesSeed } from '../seeds/countries.seeds';
-import { citiesSeed } from '../seeds/cities.seeds';
-import { fileTypesSeed } from '../seeds/fileTypes.seeds';
-import { licensesSeed } from '../seeds/licenses.seeds';
-import { modelCategoriesSeed } from './modelCategoriesSeed';
+import { rolesSeed } from "../seeds/roles.seeds";
+import { userStatusesSeed } from "../seeds/userStatuses.seeds";
+import { storageTypesSeed } from "../seeds/storageTypes.seeds";
+import { tokenTypesSeed } from "../seeds/tokenTypes.seeds";
+import { countriesSeed } from "../seeds/countries.seeds";
+import { citiesSeed } from "../seeds/cities.seeds";
+import { fileTypesSeed } from "../seeds/fileTypes.seeds";
+import { licensesSeed } from "../seeds/licenses.seeds";
+import { modelCategoriesSeed } from "./modelCategoriesSeed";
 
-import {SeedsData} from '../../../types/global';
+import { SeedsData } from "../../../types/global";
 
-
-
-interface MyGlobal extends NodeJS.Global {
+interface MyGlobal {
     seedsData?: SeedsData;
 }
 
@@ -29,7 +27,6 @@ if (!g.seedsData) {
     g.seedsData = {};
 }
 
-
 const allSeeders: Seeder[] = [
     rolesSeed,
     userStatusesSeed,
@@ -39,12 +36,11 @@ const allSeeders: Seeder[] = [
     citiesSeed,
     fileTypesSeed,
     licensesSeed,
-    modelCategoriesSeed
+    modelCategoriesSeed,
 ];
 
 export async function seedDatabase(): Promise<void> {
     try {
-
         if (!g.seedsData) {
             g.seedsData = {};
         }
@@ -55,19 +51,17 @@ export async function seedDatabase(): Promise<void> {
             syncLogger.info(`✅ Seeder completed: ${seeder.name}`);
         }
 
-        syncLogger.info('🎉 All seeders completed successfully');
-        
+        syncLogger.info("🎉 All seeders completed successfully");
     } catch (error) {
-        syncLogger.error('❌ Database seeding failed:', error);
+        syncLogger.error("❌ Database seeding failed:", error);
         throw error;
-        
     } finally {
         delete g.seedsData;
-        syncLogger.info('🧹 seedsData cleaned up from global');
+        syncLogger.info("🧹 seedsData cleaned up from global");
     }
 }
 
-export { 
+export {
     rolesSeed,
     userStatusesSeed,
     storageTypesSeed,
@@ -76,5 +70,5 @@ export {
     citiesSeed,
     fileTypesSeed,
     licensesSeed,
-    modelCategoriesSeed
+    modelCategoriesSeed,
 };
