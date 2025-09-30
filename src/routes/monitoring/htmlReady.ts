@@ -1,8 +1,8 @@
-import conf from '../../../conf.json';
+import conf from "../../../conf.json";
 
-const appName = (conf as any).appName || 'App';
-const reqInterval = (conf as any).monitoringSettings?.reqInterval || 1000;
-const x_seconds = (conf as any).monitoringSettings?.x_seconds || 60;
+const appName = conf.appName || "App";
+const reqInterval = conf.monitoringSettings?.reqInterval || 1000;
+const x_seconds = conf.monitoringSettings?.x_seconds || 60;
 const barNumber = Math.round((Math.min(x_seconds, 120) * 1000) / reqInterval);
 
 const css = `

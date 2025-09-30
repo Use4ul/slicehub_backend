@@ -1,8 +1,8 @@
-import { QueryInterface } from 'sequelize';
+import { QueryInterface } from "sequelize";
 
 export interface Migration {
-    up(queryInterface: QueryInterface): Promise<void>;
-    down(queryInterface: QueryInterface): Promise<void>;
+    up(_queryInterface: QueryInterface): Promise<void>;
+    down(_queryInterface: QueryInterface): Promise<void>;
 }
 
 export interface MigrationRecord {
@@ -12,5 +12,5 @@ export interface MigrationRecord {
 }
 
 export interface MigrationManagerOptions {
-    targetVersion?: number;  // До какой версии
+    targetVersion?: number; // До какой версии
 }

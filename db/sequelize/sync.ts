@@ -1,13 +1,12 @@
-import { syncLogger, loggerDB } from '../../sys/logger';
-import { Configuration } from '../../src/types/config';
-import { SyncOptions } from 'sequelize';
-import { dbConnection } from './index';
-import conf from '../../conf.json';
+import { syncLogger, loggerDB } from "../../sys/logger";
+import { Configuration } from "../../config/config";
+import { SyncOptions } from "sequelize";
+import { dbConnection } from "./index";
+import conf from "../../conf.json";
 
-const config = conf as Configuration;
+const config = conf as unknown as Configuration;
 
 export const syncDatabase = async (options: SyncOptions = {}): Promise<boolean> => {
-    
     const defaultOptions: SyncOptions = {
         alter: config.syncOptions?.alter,
         force: config.syncOptions?.forсe || false,
@@ -19,12 +18,12 @@ export const syncDatabase = async (options: SyncOptions = {}): Promise<boolean> 
     const finalOptions = { ...defaultOptions, ...options };
 
     try {
-        syncLogger.info('Starting database sync with options:', finalOptions);
+        syncLogger.info("Starting database sync with options:", finalOptions);
         await dbConnection.sync(finalOptions);
-        syncLogger.info('Database synced successfully');
+        syncLogger.info("Database synced successfully");
         return true;
     } catch (error) {
-        syncLogger.warn('Database sync failed:', error);
+        syncLogger.warn("Database sync failed:", error);
         throw error;
     }
 };

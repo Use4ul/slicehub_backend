@@ -1,9 +1,9 @@
-import { QueryInterface } from 'sequelize';
-import { syncLogger } from '../../../sys/logger'
+import { QueryInterface } from "sequelize";
+import { syncLogger } from "../../../sys/logger";
 
 export const up = async (queryInterface: QueryInterface): Promise<void> => {
-    syncLogger.info('🔄 Running migration: Create case-insensitive indexes');
-    
+    syncLogger.info("🔄 Running migration: Create case-insensitive indexes");
+
     await queryInterface.sequelize.query(`
         CREATE UNIQUE INDEX IF NOT EXISTS countries_name_ci_idx 
         ON countries (LOWER(name));
@@ -67,12 +67,12 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
         ON token_types (LOWER(name));
     `);
 
-    syncLogger.info('✅ Case-insensitive indexes created successfully');
+    syncLogger.info("✅ Case-insensitive indexes created successfully");
 };
 
 export const down = async (queryInterface: QueryInterface): Promise<void> => {
-    syncLogger.warn('🔄 Reverting migration: Drop case-insensitive indexes');
-    
+    syncLogger.warn("🔄 Reverting migration: Drop case-insensitive indexes");
+
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS countries_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS cities_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS tags_name_ci_idx;`);
@@ -87,7 +87,7 @@ export const down = async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS profiles_contact_email_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS token_types_name_ci_idx;`);
 
-    syncLogger.warn('✅ Case-insensitive indexes dropped successfully');
+    syncLogger.warn("✅ Case-insensitive indexes dropped successfully");
 };
 
 export default { up, down };

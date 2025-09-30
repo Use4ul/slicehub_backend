@@ -1,8 +1,8 @@
-import { exec } from 'child_process';
-import * as os from 'os';
+import { exec } from "child_process";
+import * as os from "os";
 
-import conf from '../../../conf.json';
-import { mainLogger } from '../../../sys/logger';
+import conf from "../../../conf.json";
+import { mainLogger } from "../../../sys/logger";
 
 interface CpuCore {
     core: number;
@@ -66,18 +66,18 @@ const coreCache: CoreCache = {
 function detectOSType(): string {
     const platform = os.platform();
     switch (platform) {
-        case 'win32':
-            return 'windows';
-        case 'linux':
-            return 'linux';
-        case 'darwin':
-            return 'macos';
+        case "win32":
+            return "windows";
+        case "linux":
+            return "linux";
+        case "darwin":
+            return "macos";
         default:
-            return 'unknown';
+            return "unknown";
     }
 }
 
-const osType = (conf as any).settings?.osType || detectOSType();
+const osType = conf.monitoringSettings?.osType || detectOSType();
 mainLogger.info(`Operating system detected: ${osType} (platform: ${os.platform()})`);
 
 export async function getCurrentCoreWindows(): Promise<number> {
@@ -89,14 +89,14 @@ export async function getCurrentCoreWindows(): Promise<number> {
                 { timeout: 1000 },
                 (error, stdout) => {
                     if (error) {
-                        mainLogger.debug('WMIC failed, using fallback');
+                        mainLogger.debug("WMIC failed, using fallback");
                         resolve(process.pid % os.cpus().length);
                         return;
                     }
                     try {
                         const lines = stdout
                             .trim()
-                            .split('\r\n')
+                            .split("\r\n")
                             .filter((line) => line.trim());
                         if (lines.length > 1) {
                             for (let i = 1; i < lines.length; i++) {
@@ -109,13 +109,13 @@ export async function getCurrentCoreWindows(): Promise<number> {
                         }
                         resolve(process.pid % os.cpus().length);
                     } catch {
-                        mainLogger.debug('Windows core parsing failed');
+                        mainLogger.debug("Windows core parsing failed");
                         resolve(process.pid % os.cpus().length);
                     }
                 }
             );
         } catch {
-            mainLogger.warn('Windows core detection error');
+            mainLogger.warn("Windows core detection error");
             resolve(process.pid % os.cpus().length);
         }
     });
@@ -156,12 +156,12 @@ export async function getCurrentCoreMacOS(): Promise<number> {
                     const coreId = parseInt(stdout.trim(), 10);
                     resolve(!isNaN(coreId) ? coreId : process.pid % os.cpus().length);
                 } catch (error) {
-                    mainLogger.info('Error in getCurrentCoreMacOS exec: ', error);
+                    mainLogger.info("Error in getCurrentCoreMacOS exec: ", error);
                     resolve(process.pid % os.cpus().length);
                 }
             });
         } catch (error) {
-            mainLogger.info('Error in getCurrentCoreMacOS: ', error);
+            mainLogger.info("Error in getCurrentCoreMacOS: ", error);
             resolve(process.pid % os.cpus().length);
         }
     });
@@ -171,13 +171,13 @@ export async function updateCurrentCore(): Promise<void> {
     try {
         let coreId: number;
         switch (osType) {
-            case 'windows':
+            case "windows":
                 coreId = await getCurrentCoreWindows();
                 break;
-            case 'linux':
+            case "linux":
                 coreId = await getCurrentCoreLinux();
                 break;
-            case 'macos':
+            case "macos":
                 coreId = await getCurrentCoreMacOS();
                 break;
             default:
@@ -260,7 +260,7 @@ export function getMonitorData(): MonitorData {
         core: currentCoreId,
         usage: 0,
         isCurrent: true,
-        model: '',
+        model: "",
         speed: 0,
     };
     const totalCpuUsage = coresUsage.reduce((sum, core) => sum + core.usage, 0) / coresUsage.length;

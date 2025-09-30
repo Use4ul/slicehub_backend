@@ -1,19 +1,19 @@
-import conf from '../../conf.json';
-import { Sequelize, DataTypes } from 'sequelize';
-import { loggerDB } from '../../sys/logger';
-import { Configuration } from '../../src/types/config';
-import { initializeModels } from './models';
+import conf from "../../conf.json";
+import { Sequelize } from "sequelize";
+import { loggerDB } from "../../sys/logger";
+import { Configuration } from "../../config/config";
+import { initializeModels } from "./models";
 
 const config = conf as unknown as Configuration;
 
 // Проверки конфигурации
 if (!config.DB || !config.auth) {
-    throw new Error('Database configuration is missing in conf.json');
+    throw new Error("Database configuration is missing in conf.json");
 }
 
 const dbName = config.settings.database;
 
-if (!dbName) throw new Error('Database name not specified in settings.database');
+if (!dbName) throw new Error("Database name not specified in settings.database");
 
 const dbSettings = config.DB[dbName];
 
@@ -26,11 +26,13 @@ if (!auth) throw new Error(`Auth settings for user ${dbSettings.user} not found 
 // Инициализация Sequelize
 const dbConnection = new Sequelize(dbSettings.database, auth.login, auth.password, {
     host: dbSettings.host,
-    port: typeof dbSettings.port === 'string' ? parseInt(dbSettings.port) : dbSettings.port,
-    dialect: dbSettings.dialect as 'postgres',
-    logging: dbSettings.logging ? (sql: string, timing?: number) => {
-        loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
-    } : false,
+    port: typeof dbSettings.port === "string" ? parseInt(dbSettings.port) : dbSettings.port,
+    dialect: dbSettings.dialect as "postgres",
+    logging: dbSettings.logging
+        ? (sql: string, timing?: number) => {
+              loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
+          }
+        : false,
     benchmark: dbSettings.benchmark,
     pool: {
         max: 5,
@@ -46,9 +48,9 @@ const Models = initializeModels(dbConnection);
 export const authenticateDB = async (): Promise<void> => {
     try {
         await dbConnection.authenticate();
-        loggerDB.info('Database connection established successfully.');
+        loggerDB.info("Database connection established successfully.");
     } catch (error) {
-        loggerDB.error('Unable to connect to the database:', error);
+        loggerDB.error("Unable to connect to the database:", error);
         process.exit(1);
     }
 };

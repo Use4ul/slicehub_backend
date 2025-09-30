@@ -1,18 +1,18 @@
-import { syncLogger } from '../../sys/logger';
-import { dbConnection } from '../sequelize/index';
-import { MigrationManager } from './index';
+import { syncLogger } from "../../sys/logger";
+import { dbConnection } from "../sequelize/index";
+import { MigrationManager } from "./index";
 
 // Утилиты для запуска миграций
 
 // Выполняет миграции до указанной версии
 export async function runMigrations(targetVersion?: number): Promise<void> {
     try {
-        syncLogger.info('🚀 Starting migrations...');
+        syncLogger.info("🚀 Starting migrations...");
         const migrationManager = new MigrationManager(dbConnection.getQueryInterface());
         await migrationManager.migrate({ targetVersion });
-        syncLogger.info('✅ Migrations completed successfully');
+        syncLogger.info("✅ Migrations completed successfully");
     } catch (error) {
-        syncLogger.error('❌ Migrations failed:', error);
+        syncLogger.error("❌ Migrations failed:", error);
         throw error;
     }
 }
@@ -20,16 +20,15 @@ export async function runMigrations(targetVersion?: number): Promise<void> {
 // Откатывает миграции до указанной версии
 export async function rollbackMigrations(targetVersion: number = 0): Promise<void> {
     try {
-        syncLogger.info('🔄 Rolling back migrations...');
+        syncLogger.info("🔄 Rolling back migrations...");
         const migrationManager = new MigrationManager(dbConnection.getQueryInterface());
         await migrationManager.rollback(targetVersion);
-        syncLogger.info('✅ Rollback completed successfully');
+        syncLogger.info("✅ Rollback completed successfully");
     } catch (error) {
-        syncLogger.error('❌ Rollback failed:', error);
+        syncLogger.error("❌ Rollback failed:", error);
         throw error;
     }
 }
-
 
 // Показывает статус миграций
 export async function showMigrationStatus(): Promise<void> {
@@ -37,17 +36,16 @@ export async function showMigrationStatus(): Promise<void> {
         const migrationManager = new MigrationManager(dbConnection.getQueryInterface());
         await migrationManager.status();
     } catch (error) {
-        syncLogger.error('❌ Failed to get migration status:', error);
+        syncLogger.error("❌ Failed to get migration status:", error);
         throw error;
     }
 }
 
 // Создает новую миграцию (утилита для разработки)
 export function createMigrationTemplate(name: string): string {
-    const timestamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const migrationId = Object.keys(require('./index').migrations).length + 1;
-    
-    return `// db/migrations/${migrationId.toString().padStart(3, '0')}-${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.ts
+    const migrationId = Object.keys(require("./index").migrations).length + 1;
+
+    return `// db/migrations/${migrationId.toString().padStart(3, "0")}-${name.toLowerCase().replace(/[^a-z0-9]/g, "-")}.ts
 import { QueryInterface } from 'sequelize';
 import { Migration } from './types';
 
