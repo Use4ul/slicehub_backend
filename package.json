@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon app.ts",
-        "build": "tsc",
+        "dev": "cross-env NODE_ENV=development nodemon --watch . --exec \"webpack --watch\"",
+        "build": "cross-env NODE_ENV=production webpack",
         "start": "node dist/app.js",
         "lint": "eslint . --ext .ts,.js",
         "lint:fix": "eslint . --ext .ts,.js --fix",
@@ -34,6 +34,7 @@
         "@types/ws": "^8.18.1",
         "@typescript-eslint/eslint-plugin": "^8.44.0",
         "@typescript-eslint/parser": "^8.44.0",
+        "cross-env": "^10.1.0",
         "eslint": "^9.35.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.32.0",
@@ -43,7 +44,11 @@
         "globals": "^16.4.0",
         "nodemon": "^3.1.10",
         "prettier": "^3.6.2",
+        "ts-loader": "^9.5.4",
         "ts-node": "^10.9.2",
-        "typescript": "^5.9.2"
+        "typescript": "^5.9.2",
+        "webpack": "^5.102.0",
+        "webpack-cli": "^6.0.1",
+        "webpack-node-externals": "^3.0.0"
     }
 }
