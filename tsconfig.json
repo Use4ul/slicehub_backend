@@ -2,7 +2,9 @@
     "compilerOptions": {
         "target": "ES2020",
         "module": "commonjs",
-        "lib": ["ES2020"],
+        "lib": [
+            "ES2020"
+        ],
         "outDir": "./dist",
         "rootDir": "./",
         "esModuleInterop": true,
@@ -13,11 +15,27 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "baseUrl": ".",
-        "types": ["node"],
+        "types": [
+            "node"
+        ],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "paths": {
-            "*": ["node_modules/*"]
+            "*": [
+                "node_modules/*"
+            ]
         }
     },
-    "include": ["app.ts", "src/**/*", "sys/**/*", "types/**/*", "db/**/*", "config/**/*"],
-    "exclude": ["node_modules", "dist"]
+    "include": [
+        "app.ts",
+        "src/**/*",
+        "sys/**/*",
+        "types/**/*",
+        "db/**/*",
+        "config/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }

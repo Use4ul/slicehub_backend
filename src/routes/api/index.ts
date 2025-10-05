@@ -1,9 +1,53 @@
 import { Router } from "express";
 
+import usersRouter from "./users/controller";
 import categoriesRouter from "./categories/controller";
+import tagsRouter from "./tags/controller";
+import countriesRouter from "./countries/controller";
+import citiesRouter from "./cities/controller";
+import rolesRouter from "./roles/controller";
+import userStatusesRouter from "./user-statuses/controller";
+import fileTypesRouter from "./file-types/controller";
+import tokenTypesRouter from "./token-types/controller";
+import licensesRouter from "./licenses/controller";
+import models3dRouter from "./models-3d/controller";
+import modelFilesRouter from "./model-files/controller";
+import modelPreviewsRouter from "./model-previews/controller";
+import modelLicensesRouter from "./model-licenses/controller";
+import modelTagsRouter from "./model-tags/controller";
+import modelRatingsRouter from "./model-ratings/controller";
+import modelCommentsRouter from "./model-comments/controller";
+import collectionsRouter from "./collections/controller";
+import collectionItemsRouter from "./collection-items/controller";
+import authProvidersRouter from "./auth-providers/controller";
+import authIdentitiesRouter from "./auth-identities/controller";
+import userRolesRouter from "./user-roles/controller";
+import userStatusAuditRouter from "./user-status-audit/controller";
 
 const router = Router();
 
+router.use("/users", usersRouter);
 router.use("/categories", categoriesRouter);
+router.use("/tags", tagsRouter);
+router.use("/countries", countriesRouter);
+router.use("/cities", citiesRouter);
+router.use("/roles", rolesRouter);
+router.use("/user-statuses", userStatusesRouter);
+router.use("/file-types", fileTypesRouter);
+router.use("/token-types", tokenTypesRouter);
+router.use("/licenses", licensesRouter);
+router.use("/models-3d", models3dRouter);
+router.use("/model-files", modelFilesRouter);
+router.use("/model-previews", modelPreviewsRouter);
+router.use("/model-licenses", modelLicensesRouter);
+router.use("/model-tags", modelTagsRouter);
+router.use("/model-ratings", modelRatingsRouter);
+router.use("/model-comments", modelCommentsRouter);
+router.use("/collections", collectionsRouter);
+router.use("/collection-items", collectionItemsRouter);
+router.use("/auth-providers", authProvidersRouter);
+router.use("/auth-identities", authIdentitiesRouter);
+router.use("/user-roles", userRolesRouter);
+router.use("/user-status-audit", userStatusAuditRouter);
 
 export default router;
