@@ -1,8 +1,11 @@
+import "reflect-metadata";
 import conf from "./conf.json";
 import * as http from "http";
 import express, { Express } from "express";
 import { mainLogger } from "./sys/logger";
 import { monitoringRouter, setupCpuMonitoring } from "./src/routes/monitoring";
+import apiRouter from "./src/routes/api";
+import { setupSwagger } from "./src/swagger/swagger";
 import initDB from "./db/init";
 
 interface Settings {
@@ -23,12 +26,21 @@ const PORT = config.settings.port || parseInt(process.env.PORT || "3000", 10);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routers imports
-import apiRouter from "./src/routes/api/categories/controller";
-
-// Routers connection
+// Mount API router
 app.use("/api", apiRouter);
+
+// Monitoring routes
 app.use("/monitoring", monitoringRouter);
+
+// Setup Swagger documentation
+setupSwagger(app);
+
+// Global error handler to avoid app crash on async DB errors
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+	const message = err instanceof Error ? err.message : String(err);
+	mainLogger.error("Unhandled error:", message);
+	res.status(503).json({ message: "Service unavailable" });
+});
 
 const bootstrap = async (): Promise<void> => {
     try {
@@ -40,7 +52,9 @@ const bootstrap = async (): Promise<void> => {
         mainLogger.info(
             "\n🏠 Monitoring:",
             `\nhttp://localhost:${PORT}/monitoring/ui`,
-            `\nhttp://localhost:${PORT}/monitoring/healthcheck`
+            `\nhttp://localhost:${PORT}/monitoring/healthcheck`,
+            "\n📚 API Documentation:",
+            `\nhttp://localhost:${PORT}/api-docs`
         );
     } catch (error) {
         const err = error as Error;
