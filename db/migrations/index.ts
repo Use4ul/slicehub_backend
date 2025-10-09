@@ -4,10 +4,12 @@ import { Migration, MigrationRecord, MigrationManagerOptions } from "./types";
 
 // Импорты миграций
 import migration001 from "./migrationsFiles/001-create-case-insensitive-indexes";
+import migration002 from "./migrationsFiles/002-add-model-categories-fk";
 
 // Реестр всех миграций в порядке выполнения
 const migrationsRegistry: { [key: number]: Migration } = {
     1: migration001,
+    2: migration002,
 };
 
 export class MigrationManager {
