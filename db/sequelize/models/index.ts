@@ -26,6 +26,7 @@ import { CollectionItem } from "./CollectionItem";
 import CommentAttachment from "./CommentAttachment";
 import Country from "./Country";
 import City from "./City";
+import { Migration } from "./Migration";
 
 export interface Models {
     User: ReturnType<typeof User.initialize>;
@@ -55,6 +56,7 @@ export interface Models {
     CommentAttachment: ReturnType<typeof CommentAttachment.initialize>;
     Country: ReturnType<typeof Country.initialize>;
     City: ReturnType<typeof City.initialize>;
+    Migration: ReturnType<typeof Migration.initialize>;
 }
 
 export function initializeModels(sequelize: Sequelize): Models {
@@ -87,11 +89,12 @@ export function initializeModels(sequelize: Sequelize): Models {
         CommentAttachment: CommentAttachment.initialize(sequelize),
         Country: Country.initialize(sequelize),
         City: City.initialize(sequelize),
+        Migration: Migration.initialize(sequelize),
     };
 
     // Установка связей после инициализации всех моделей
     Object.values(models).forEach((model) => {
-        if (model.associate) {
+        if ('associate' in model && typeof model.associate === 'function') {
             model.associate(models);
         }
     });
@@ -127,59 +130,5 @@ export {
     CommentAttachment,
     Country,
     City,
+    Migration,
 };
-
-/**
-tags — поле name и slug
-
-model_categories — поле name и slug
-
-models_3d — поле slug
-
-auth_providers — поле name
-
-roles — поле name
-
-user_statuses — поле name
-
-profiles — contact_email (если в системе email уникальный)
-
-countries — как уже указано, поле name
-
-file_types — extension (например, ".STL" и ".stl" считаются одинаковыми, если нужно)
-
-token_types — поле name
-
--- countries.name
-CREATE UNIQUE INDEX countries_name_ci_idx ON countries (LOWER(name));
-
--- tags.name и tags.slug
-CREATE UNIQUE INDEX tags_name_ci_idx ON tags (LOWER(name));
-CREATE UNIQUE INDEX tags_slug_ci_idx ON tags (LOWER(slug));
-
--- model_categories.name и model_categories.slug
-CREATE UNIQUE INDEX model_categories_name_ci_idx ON model_categories (LOWER(name));
-CREATE UNIQUE INDEX model_categories_slug_ci_idx ON model_categories (LOWER(slug));
-
--- models_3d.slug
-CREATE UNIQUE INDEX models_3d_slug_ci_idx ON models_3d (LOWER(slug));
-
--- auth_providers.name
-CREATE UNIQUE INDEX auth_providers_name_ci_idx ON auth_providers (LOWER(name));
-
--- roles.name
-CREATE UNIQUE INDEX roles_name_ci_idx ON roles (LOWER(name));
-
--- user_statuses.name
-CREATE UNIQUE INDEX user_statuses_name_ci_idx ON user_statuses (LOWER(name));
-
--- file_types.extension
-CREATE UNIQUE INDEX file_types_extension_ci_idx ON file_types (LOWER(extension));
-
--- profiles.contact_email
-CREATE UNIQUE INDEX profiles_contact_email_ci_idx ON profiles (LOWER(contact_email));
-
--- token_types.name
-CREATE UNIQUE INDEX token_types_name_ci_idx ON token_types (LOWER(name));
-
- */

@@ -1,8 +1,20 @@
+export interface MockSeedingOptions {
+    enableMockSeeds: boolean;   // Включить/выключить генерацию тестовых данных
+    mockSeedsRunCount: number;  // Сколько раз выполнить генерацию (за один запуск приложения)
+}
+
+export interface SyncOptions {
+    force: boolean;
+    alter: boolean;
+    mockSeeding: MockSeedingOptions;
+}
+
 export interface Settings {
     port: number;
     database?: string;
     logging?: LoggingConfig;
     osType?: string;
+    sync: SyncOptions;
 }
 
 export interface DatabaseSettings {
@@ -34,21 +46,15 @@ export interface MonitoringSettings {
     osType?: string;
 }
 
-export interface SyncOptions {
-    forсe: boolean;
-    alter: boolean;
-}
-
 export interface Configuration {
     appName: string;
     settings: Settings;
-    DB: {
+    db: {
         [key: string]: DatabaseSettings;
     };
     auth: {
         [key: string]: DatabaseAuth;
     };
     monitoringSettings?: MonitoringSettings;
-    syncOptions: SyncOptions;
     devUsers: string[];
 }

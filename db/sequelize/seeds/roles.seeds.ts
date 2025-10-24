@@ -1,5 +1,6 @@
 import { Role } from "../models";
 
+// Default seeds data
 export const rolesSeed = {
     name: "Roles",
     async run() {

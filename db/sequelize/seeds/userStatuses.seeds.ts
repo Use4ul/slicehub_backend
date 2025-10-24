@@ -1,5 +1,6 @@
 import { UserStatus } from "../models";
 
+// Default seeds data
 export const userStatusesSeed = {
     name: "UserStatuses",
     async run() {
