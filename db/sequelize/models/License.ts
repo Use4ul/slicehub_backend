@@ -39,7 +39,7 @@ export class License
         return License.init(
             {
                 id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-                name: { type: DataTypes.STRING(255), allowNull: false },
+                name: { type: DataTypes.STRING(255), allowNull: false, unique: true },
                 description: { type: DataTypes.TEXT, allowNull: false },
                 url: { type: DataTypes.TEXT, allowNull: true },
                 allows_commercial_use: {

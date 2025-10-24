@@ -7,7 +7,7 @@ import { initializeModels } from "./models";
 const config = conf as unknown as Configuration;
 
 // Проверки конфигурации
-if (!config.DB || !config.auth) {
+if (!config.db || !config.auth) {
     throw new Error("Database configuration is missing in conf.json");
 }
 
@@ -15,9 +15,9 @@ const dbName = config.settings.database;
 
 if (!dbName) throw new Error("Database name not specified in settings.database");
 
-const dbSettings = config.DB[dbName];
+const dbSettings = config.db[dbName];
 
-if (!dbSettings) throw new Error(`Database settings for ${dbName} not found in config.DB`);
+if (!dbSettings) throw new Error(`Database settings for ${dbName} not found in config.db`);
 
 const auth = config.auth[dbSettings.user];
 

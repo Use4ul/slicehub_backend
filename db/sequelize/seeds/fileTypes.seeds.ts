@@ -1,5 +1,6 @@
 import { FileType } from "../models";
 
+// Default seeds data
 export const fileTypesSeed = {
     name: "FileTypes",
     async run() {
