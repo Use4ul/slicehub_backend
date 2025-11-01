@@ -1,0 +1,46 @@
+import { BaseService } from "./base.service";
+import Models from "../../db/sequelize";
+import { ModelComment } from "../../db/sequelize/models/ModelComment";
+
+/**
+ * Сервис для работы с комментариями моделей
+ */
+export class ModelCommentService extends BaseService<ModelComment> {
+	constructor() {
+		super(Models.ModelComment);
+	}
+
+	/**
+	 * Получить комментарии модели
+	 */
+	async findByModel(modelId: string): Promise<ModelComment[]> {
+		return await this.findAll({
+			where: { model_id: modelId },
+			order: [['created_at', 'DESC']]
+		});
+	}
+
+	/**
+	 * Получить комментарии пользователя
+	 */
+	async findByUser(userId: string): Promise<ModelComment[]> {
+		return await this.findAll({
+			where: { user_id: userId },
+			order: [['created_at', 'DESC']]
+		});
+	}
+
+	/**
+	 * Получить дочерние комментарии (ответы)
+	 */
+	async findReplies(parentCommentId: number): Promise<ModelComment[]> {
+		return await this.findAll({
+			where: { parent_comment_id: parentCommentId },
+			order: [['created_at', 'ASC']]
+		});
+	}
+}
+
+// Экспортируем singleton instance
+export const modelCommentService = new ModelCommentService();
+

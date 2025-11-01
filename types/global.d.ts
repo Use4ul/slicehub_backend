@@ -16,6 +16,12 @@ declare global {
             seedsData?: SeedsData;
         }
     }
+
+    namespace Express {
+        interface Request {
+            requestId: string;
+        }
+    }
 }
 
 export {};

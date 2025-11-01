@@ -7,6 +7,7 @@ import { monitoringRouter, setupCpuMonitoring } from "./src/routes/monitoring";
 import apiRouter from "./src/routes/api";
 import { setupSwagger } from "./src/swagger/swagger";
 import initDB from "./db/init";
+import { requestIdMiddleware } from "./src/middlewares";
 
 interface Settings {
     port: number;
@@ -21,6 +22,9 @@ const config: Configuration = conf as Configuration;
 const app: Express = express();
 const server = http.createServer(app);
 const PORT = config.settings.port || parseInt(process.env.PORT || "3000", 10);
+
+// Request ID middleware - should be first to track all requests
+app.use(requestIdMiddleware);
 
 // Connect MWs
 app.use(express.json());
