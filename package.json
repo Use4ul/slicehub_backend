@@ -9,7 +9,8 @@
         "start": "node dist/app.js",
         "lint": "eslint . --ext .ts,.js",
         "lint:fix": "eslint . --ext .ts,.js --fix",
-        "lint:watch": "eslint . --ext .ts,.js --watch"
+        "lint:watch": "eslint . --ext .ts,.js --watch",
+        "migration:create": "ts-node db/migrations/create-migration.ts"
     },
     "keywords": [],
     "author": "",

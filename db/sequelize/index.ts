@@ -17,7 +17,7 @@ if (!dbName) throw new Error("Database name not specified in settings.database")
 
 const dbSettings = config.db[dbName];
 
-if (!dbSettings) throw new Error(`Database settings for ${dbName} not found in config.DB`);
+if (!dbSettings) throw new Error(`Database settings for ${dbName} not found in config.db`);
 
 const auth = config.auth[dbSettings.user];
 

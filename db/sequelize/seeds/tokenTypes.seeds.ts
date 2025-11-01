@@ -1,5 +1,6 @@
 import { TokenType } from "../models";
 
+// Default seeds data
 export const tokenTypesSeed = {
     name: "TokenTypes",
     async run() {

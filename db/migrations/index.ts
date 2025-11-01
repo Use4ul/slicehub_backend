@@ -1,10 +1,11 @@
 import { QueryInterface } from "sequelize";
 import { syncLogger } from "../../sys/logger";
 import { Migration, MigrationRecord, MigrationManagerOptions } from "./types";
+import { EMOJI } from "../../src/utils/emojis";
 
 // Импорты миграций
 import migration001 from "./migrationsFiles/001-create-case-insensitive-indexes";
-import migration002 from "./migrationsFiles/002-add-model-categories-fk";
+import migration002 from "./migrationsFiles/002-add-username-validation-constraint";
 
 // Реестр всех миграций в порядке выполнения
 const migrationsRegistry: { [key: number]: Migration } = {
@@ -19,37 +20,8 @@ export class MigrationManager {
         this.queryInterface = queryInterface;
     }
 
-    // Создает таблицу для отслеживания выполненных миграций
-    private async ensureMigrationsTable(): Promise<void> {
-        const tableExists = await this.queryInterface
-            .showAllTables()
-            .then((tables) => tables.includes("migrations"));
-
-        if (!tableExists) {
-            await this.queryInterface.createTable("migrations", {
-                id: {
-                    type: "INTEGER",
-                    primaryKey: true,
-                    autoIncrement: true,
-                },
-                name: {
-                    type: "VARCHAR(255)",
-                    allowNull: false,
-                },
-                executed_at: {
-                    type: "TIMESTAMP",
-                    allowNull: false,
-                    defaultValue: this.queryInterface.sequelize.literal("CURRENT_TIMESTAMP"),
-                },
-            });
-            syncLogger.info("✅ Migrations table created");
-        }
-    }
-
     // Получает список выполненных миграций
     private async getExecutedMigrations(): Promise<MigrationRecord[]> {
-        await this.ensureMigrationsTable();
-
         const [results] = await this.queryInterface.sequelize.query(`
             SELECT id, name, executed_at 
             FROM migrations 
@@ -96,30 +68,30 @@ export class MigrationManager {
 
         const targetId = targetVersion || Math.max(...migrationIds);
 
-        syncLogger.info(`🎯 Target migration version: ${targetId}`);
-        syncLogger.info(`📊 Executed migrations: ${executedMigrations.length}`);
+        syncLogger.info(`${EMOJI.TARGET} Target migration version: ${targetId}`);
+        syncLogger.info(`${EMOJI.CHART} Executed migrations: ${executedMigrations.length}`);
 
         // Выполняем миграции
         for (const migrationId of migrationIds) {
             if (migrationId > targetId) break;
 
             if (!executedIds.has(migrationId)) {
-                syncLogger.info(`🔄 Running migration #${migrationId}...`);
+                syncLogger.info(`${EMOJI.MIGRATION} Running migration #${migrationId}...`);
 
                 try {
                     await migrationsRegistry[migrationId].up(this.queryInterface);
                     await this.addMigrationRecord(`migration_${migrationId}`);
-                    syncLogger.info(`✅ Migration #${migrationId} completed successfully`);
+                    syncLogger.info(`${EMOJI.SUCCESS} Migration #${migrationId} completed successfully`);
                 } catch (error) {
-                    syncLogger.error(`❌ Migration #${migrationId} failed:`, error);
+                    syncLogger.error(`${EMOJI.ERROR} Migration #${migrationId} failed:`, error);
                     throw error;
                 }
             } else {
-                syncLogger.warn(`⏭️ Migration #${migrationId} already executed, skipping`);
+                syncLogger.warn(`${EMOJI.SKIP} Migration #${migrationId} already executed, skipping`);
             }
         }
 
-        syncLogger.info("✅ All migrations completed successfully");
+        syncLogger.info(`${EMOJI.SUCCESS} All migrations completed successfully`);
     }
 
     // Откатывает миграции до указанной версии
@@ -130,19 +102,19 @@ export class MigrationManager {
         for (const migration of executedMigrations.reverse()) {
             if (migration.id <= targetVersion) break;
 
-            syncLogger.info(`🔄 Rolling back migration #${migration.id}...`);
+            syncLogger.info(`${EMOJI.ROLLBACK} Rolling back migration #${migration.id}...`);
 
             try {
                 await migrationsRegistry[migration.id].down(this.queryInterface);
                 await this.removeMigrationRecord(migration.id);
-                syncLogger.info(`✅ Migration #${migration.id} rolled back successfully`);
+                syncLogger.info(`${EMOJI.SUCCESS} Migration #${migration.id} rolled back successfully`);
             } catch (error) {
-                syncLogger.error(`❌ Rollback of migration #${migration.id} failed:`, error);
+                syncLogger.error(`${EMOJI.ERROR} Rollback of migration #${migration.id} failed:`, error);
                 throw error;
             }
         }
 
-        syncLogger.info("✅ Rollback completed successfully");
+        syncLogger.info(`${EMOJI.SUCCESS} Rollback completed successfully`);
     }
 
     // Показывает статус миграций
@@ -153,19 +125,19 @@ export class MigrationManager {
             .map(Number)
             .sort((a, b) => a - b);
 
-        syncLogger.info("\n📊 Migration Status:");
+        syncLogger.info(`\n${EMOJI.CHART} Migration Status:`);
         syncLogger.info("===================");
 
         for (const migrationId of migrationIds) {
-            const status = executedIds.has(migrationId) ? "✅ EXECUTED" : "⏳ PENDING";
+            const status = executedIds.has(migrationId) ? `${EMOJI.SUCCESS} EXECUTED` : `⏳ PENDING`;
             syncLogger.info(`#${migrationId}: ${status}`);
         }
 
         if (executedMigrations.length === migrationIds.length) {
-            syncLogger.info("\n🎉 All migrations are up to date!");
+            syncLogger.info(`\n${EMOJI.FINISH} All migrations are up to date!`);
         } else {
             syncLogger.info(
-                `\n📈 ${migrationIds.length - executedMigrations.length} migration(s) pending`
+                `\n${EMOJI.CHART} ${migrationIds.length - executedMigrations.length} migration(s) pending`
             );
         }
     }

@@ -1,5 +1,6 @@
 import { License } from "../models";
 
+// Default seeds data
 export const licensesSeed = {
     name: "Licenses",
     async run() {

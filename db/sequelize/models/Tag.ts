@@ -8,7 +8,7 @@ interface TagAttributes {
     is_active: boolean;
 }
 
-interface TagCreationAttributes extends Optional<TagAttributes, "id"> {}
+interface TagCreationAttributes extends Optional<TagAttributes, "id" | "is_active"> {}
 
 export class Tag extends Model<TagAttributes, TagCreationAttributes> implements TagAttributes {
     public id!: number;

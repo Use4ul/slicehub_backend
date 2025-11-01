@@ -1,5 +1,6 @@
 import { StorageType } from "../models";
 
+// Default seeds data
 export const storageTypesSeed = {
     name: "StorageTypes",
     async run() {

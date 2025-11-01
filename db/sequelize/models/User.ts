@@ -35,7 +35,21 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
                     defaultValue: Sequelize.literal("gen_random_uuid()"),
                     primaryKey: true,
                 },
-                user_name: { type: DataTypes.STRING(32), allowNull: false, unique: true },
+                user_name: {
+                    type: DataTypes.STRING(32),
+                    allowNull: false,
+                    unique: true,
+                    validate: {
+                        is: {
+                            args: /^[a-z0-9_]+$/i,
+                            msg: "Username can only contain letters, numbers and underscores",
+                        },
+                        len: {
+                            args: [3, 32],
+                            msg: "Username must be between 3 and 32 characters",
+                        },
+                    },
+                },
                 display_name: { type: DataTypes.STRING(128), allowNull: true },
                 status_id: {
                     type: DataTypes.INTEGER,
