@@ -1,0 +1,2399 @@
+{
+	"info": {
+		"_postman_id": "slicehub-api-collection",
+		"name": "SliceHub API",
+		"description": "Complete API collection for SliceHub backend with Request ID tracking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "apiUrl",
+			"value": "{{baseUrl}}/api",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get User Schema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/users/schema",
+							"host": ["{{apiUrl}}"],
+							"path": ["users", "schema"]
+						}
+					}
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/users",
+							"host": ["{{apiUrl}}"],
+							"path": ["users"]
+						}
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/users/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["users", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_name\": \"new_user\",\n  \"display_name\": \"New User\",\n  \"status_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users",
+							"host": ["{{apiUrl}}"],
+							"path": ["users"]
+						}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"display_name\": \"Updated User\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/users/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["users", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/users/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["users", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get Category Schema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/categories/schema",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories", "schema"]
+						}
+					}
+				},
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/categories",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories"]
+						}
+					}
+				},
+				{
+					"name": "Get Category by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/categories/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"New Category\",\n  \"slug\": \"new-category\",\n  \"description\": \"Category description\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/categories",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories"]
+						}
+					}
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Category\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/categories/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/categories/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["categories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Get All Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/tags",
+							"host": ["{{apiUrl}}"],
+							"path": ["tags"]
+						}
+					}
+				},
+				{
+					"name": "Get Tag by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Tag",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"new-tag\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tags",
+							"host": ["{{apiUrl}}"],
+							"path": ["tags"]
+						}
+					}
+				},
+				{
+					"name": "Update Tag",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updated-tag\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Tag",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "Get All Countries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/countries",
+							"host": ["{{apiUrl}}"],
+							"path": ["countries"]
+						}
+					}
+				},
+				{
+					"name": "Get Country by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/countries/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["countries", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Country",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Country Name\",\n  \"iso_code\": \"XX\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/countries",
+							"host": ["{{apiUrl}}"],
+							"path": ["countries"]
+						}
+					}
+				},
+				{
+					"name": "Update Country",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Country\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/countries/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["countries", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Country",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/countries/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["countries", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Cities",
+			"item": [
+				{
+					"name": "Get All Cities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/cities",
+							"host": ["{{apiUrl}}"],
+							"path": ["cities"]
+						}
+					}
+				},
+				{
+					"name": "Get City by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/cities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["cities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create City",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"City Name\",\n  \"country_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/cities",
+							"host": ["{{apiUrl}}"],
+							"path": ["cities"]
+						}
+					}
+				},
+				{
+					"name": "Update City",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated City\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/cities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["cities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete City",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/cities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["cities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/roles",
+							"host": ["{{apiUrl}}"],
+							"path": ["roles"]
+						}
+					}
+				},
+				{
+					"name": "Get Role by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"new_role\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/roles",
+							"host": ["{{apiUrl}}"],
+							"path": ["roles"]
+						}
+					}
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updated_role\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Statuses",
+			"item": [
+				{
+					"name": "Get All User Statuses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-statuses",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-statuses"]
+						}
+					}
+				},
+				{
+					"name": "Get User Status by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-statuses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-statuses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create User Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"new_status\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-statuses",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-statuses"]
+						}
+					}
+				},
+				{
+					"name": "Update User Status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updated_status\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-statuses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-statuses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User Status",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-statuses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-statuses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "File Types",
+			"item": [
+				{
+					"name": "Get All File Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/file-types",
+							"host": ["{{apiUrl}}"],
+							"path": ["file-types"]
+						}
+					}
+				},
+				{
+					"name": "Get File Type by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/file-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["file-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create File Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"new_file_type\",\n  \"extension\": \".ext\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/file-types",
+							"host": ["{{apiUrl}}"],
+							"path": ["file-types"]
+						}
+					}
+				},
+				{
+					"name": "Update File Type",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updated_file_type\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/file-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["file-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete File Type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/file-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["file-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Token Types",
+			"item": [
+				{
+					"name": "Get All Token Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/token-types",
+							"host": ["{{apiUrl}}"],
+							"path": ["token-types"]
+						}
+					}
+				},
+				{
+					"name": "Get Token Type by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/token-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["token-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Token Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"new_token_type\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/token-types",
+							"host": ["{{apiUrl}}"],
+							"path": ["token-types"]
+						}
+					}
+				},
+				{
+					"name": "Update Token Type",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updated_token_type\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/token-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["token-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Token Type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/token-types/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["token-types", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Licenses",
+			"item": [
+				{
+					"name": "Get All Licenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/licenses",
+							"host": ["{{apiUrl}}"],
+							"path": ["licenses"]
+						}
+					}
+				},
+				{
+					"name": "Get License by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create License",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"New License\",\n  \"description\": \"License description\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/licenses",
+							"host": ["{{apiUrl}}"],
+							"path": ["licenses"]
+						}
+					}
+				},
+				{
+					"name": "Update License",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated License\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete License",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3D Models",
+			"item": [
+				{
+					"name": "Get All 3D Models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/models-3d",
+							"host": ["{{apiUrl}}"],
+							"path": ["models-3d"]
+						}
+					}
+				},
+				{
+					"name": "Get 3D Model by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/models-3d/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["models-3d", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create 3D Model",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"New Model\",\n  \"description\": \"Model description\",\n  \"user_id\": 1,\n  \"category_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/models-3d",
+							"host": ["{{apiUrl}}"],
+							"path": ["models-3d"]
+						}
+					}
+				},
+				{
+					"name": "Update 3D Model",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Model\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/models-3d/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["models-3d", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete 3D Model",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/models-3d/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["models-3d", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Files",
+			"item": [
+				{
+					"name": "Get All Model Files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-files",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-files"]
+						}
+					}
+				},
+				{
+					"name": "Get Model File by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-files/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-files", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model File",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"file_type_id\": 1,\n  \"file_path\": \"/path/to/file\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-files",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-files"]
+						}
+					}
+				},
+				{
+					"name": "Update Model File",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"file_path\": \"/updated/path\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-files/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-files", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model File",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-files/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-files", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Previews",
+			"item": [
+				{
+					"name": "Get All Model Previews",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-previews",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-previews"]
+						}
+					}
+				},
+				{
+					"name": "Get Model Preview by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-previews/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-previews", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model Preview",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"preview_url\": \"https://example.com/preview.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-previews",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-previews"]
+						}
+					}
+				},
+				{
+					"name": "Update Model Preview",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"preview_url\": \"https://example.com/new-preview.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-previews/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-previews", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model Preview",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-previews/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-previews", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Licenses",
+			"item": [
+				{
+					"name": "Get All Model Licenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-licenses",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-licenses"]
+						}
+					}
+				},
+				{
+					"name": "Get Model License by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model License",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"license_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-licenses",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-licenses"]
+						}
+					}
+				},
+				{
+					"name": "Update Model License",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"license_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model License",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-licenses/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-licenses", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Tags",
+			"item": [
+				{
+					"name": "Get All Model Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-tags",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-tags"]
+						}
+					}
+				},
+				{
+					"name": "Get Model Tag by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model Tag",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"tag_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-tags",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-tags"]
+						}
+					}
+				},
+				{
+					"name": "Update Model Tag",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tag_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model Tag",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-tags/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-tags", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Ratings",
+			"item": [
+				{
+					"name": "Get All Model Ratings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-ratings",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-ratings"]
+						}
+					}
+				},
+				{
+					"name": "Get Model Rating by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-ratings/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-ratings", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model Rating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"user_id\": 1,\n  \"rating\": 5\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-ratings",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-ratings"]
+						}
+					}
+				},
+				{
+					"name": "Update Model Rating",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rating\": 4\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-ratings/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-ratings", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model Rating",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-ratings/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-ratings", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Model Comments",
+			"item": [
+				{
+					"name": "Get All Model Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-comments",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-comments"]
+						}
+					}
+				},
+				{
+					"name": "Get Model Comment by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-comments/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-comments", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Model Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 1,\n  \"user_id\": 1,\n  \"comment\": \"Great model!\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-comments",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-comments"]
+						}
+					}
+				},
+				{
+					"name": "Update Model Comment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comment\": \"Updated comment\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/model-comments/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-comments", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Model Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/model-comments/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["model-comments", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Collections",
+			"item": [
+				{
+					"name": "Get All Collections",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collections",
+							"host": ["{{apiUrl}}"],
+							"path": ["collections"]
+						}
+					}
+				},
+				{
+					"name": "Get Collection by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collections/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collections", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Collection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"My Collection\",\n  \"user_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/collections",
+							"host": ["{{apiUrl}}"],
+							"path": ["collections"]
+						}
+					}
+				},
+				{
+					"name": "Update Collection",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Updated Collection\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/collections/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collections", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Collection",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collections/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collections", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Collection Items",
+			"item": [
+				{
+					"name": "Get All Collection Items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collection-items",
+							"host": ["{{apiUrl}}"],
+							"path": ["collection-items"]
+						}
+					}
+				},
+				{
+					"name": "Get Collection Item by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collection-items/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collection-items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Collection Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"collection_id\": 1,\n  \"model_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/collection-items",
+							"host": ["{{apiUrl}}"],
+							"path": ["collection-items"]
+						}
+					}
+				},
+				{
+					"name": "Update Collection Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/collection-items/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collection-items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Collection Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/collection-items/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["collection-items", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth Providers",
+			"item": [
+				{
+					"name": "Get All Auth Providers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-providers",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-providers"]
+						}
+					}
+				},
+				{
+					"name": "Get Auth Provider by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-providers/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-providers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Auth Provider",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"google\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth-providers",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-providers"]
+						}
+					}
+				},
+				{
+					"name": "Update Auth Provider",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"github\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth-providers/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-providers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Auth Provider",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-providers/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-providers", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth Identities",
+			"item": [
+				{
+					"name": "Get All Auth Identities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-identities",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-identities"]
+						}
+					}
+				},
+				{
+					"name": "Get Auth Identity by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-identities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-identities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Auth Identity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": 1,\n  \"provider_id\": 1,\n  \"provider_user_id\": \"12345\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth-identities",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-identities"]
+						}
+					}
+				},
+				{
+					"name": "Update Auth Identity",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"provider_user_id\": \"54321\"\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/auth-identities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-identities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Auth Identity",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/auth-identities/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["auth-identities", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Roles",
+			"item": [
+				{
+					"name": "Get All User Roles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-roles",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-roles"]
+						}
+					}
+				},
+				{
+					"name": "Get User Role by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create User Role",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": 1,\n  \"role_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-roles",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-roles"]
+						}
+					}
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User Role",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-roles/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-roles", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Status Audit",
+			"item": [
+				{
+					"name": "Get All User Status Audits",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-status-audit",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-status-audit"]
+						}
+					}
+				},
+				{
+					"name": "Get User Status Audit by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-status-audit/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-status-audit", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create User Status Audit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_id\": 1,\n  \"old_status_id\": 1,\n  \"new_status_id\": 2\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-status-audit",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-status-audit"]
+						}
+					}
+				},
+				{
+					"name": "Update User Status Audit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"new_status_id\": 3\n}"
+						},
+						"url": {
+							"raw": "{{apiUrl}}/user-status-audit/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-status-audit", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User Status Audit",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/user-status-audit/:id",
+							"host": ["{{apiUrl}}"],
+							"path": ["user-status-audit", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Monitoring",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/monitoring/healthcheck",
+							"host": ["{{baseUrl}}"],
+							"path": ["monitoring", "healthcheck"]
+						}
+					}
+				},
+				{
+					"name": "Monitoring UI",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/monitoring/ui",
+							"host": ["{{baseUrl}}"],
+							"path": ["monitoring", "ui"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
+

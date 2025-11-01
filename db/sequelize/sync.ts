@@ -8,8 +8,8 @@ const config = conf as unknown as Configuration;
 
 export const syncDatabase = async (options: SyncOptions = {}): Promise<boolean> => {
     const defaultOptions: SyncOptions = {
-        alter: config.syncOptions?.alter,
-        force: config.syncOptions?.forсe || false,
+        alter: config.settings.sync.alter,
+        force: config.settings.sync.force,
         logging: (sql: string, timing?: number) => {
             loggerDB.debug(`[SQL] ${sql} | ${timing}ms`);
         },

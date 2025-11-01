@@ -1,8 +1,18 @@
+export interface MockSeedingConfig {
+    enableMockSeeds: boolean;
+    mockSeedsRunCount: number;
+}
+
+export interface SyncConfig {
+    force: boolean;
+    alter: boolean;
+    mockSeeding: MockSeedingConfig;
+}
+
 export interface Settings {
     port: number;
-    database?: string;
-    logging?: LoggingConfig;
-    osType?: string;
+    database: string;
+    sync: SyncConfig;
 }
 
 export interface DatabaseSettings {
@@ -22,33 +32,22 @@ export interface DatabaseAuth {
     password: string;
 }
 
-export interface LoggingConfig {
-    level: string;
-    file?: string;
-}
-
 export interface MonitoringSettings {
-    reqInterval?: number;
-    x_seconds?: number;
-    coreUpdate?: number;
-    osType?: string;
-}
-
-export interface SyncOptions {
-    forсe: boolean;
-    alter: boolean;
+    reqInterval: number;
+    x_seconds: number;
+    coreUpdate: number;
+    osType: string;
 }
 
 export interface Configuration {
     appName: string;
     settings: Settings;
-    DB: {
+    db: {
         [key: string]: DatabaseSettings;
     };
     auth: {
         [key: string]: DatabaseAuth;
     };
-    monitoringSettings?: MonitoringSettings;
-    syncOptions: SyncOptions;
+    monitoringSettings: MonitoringSettings;
     devUsers: string[];
 }
