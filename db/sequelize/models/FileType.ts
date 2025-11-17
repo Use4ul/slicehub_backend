@@ -34,7 +34,7 @@ export class FileType
     }
 
     static associate(models: Models) {
-        FileType.hasMany(models.ModelFile, { foreignKey: "file_type_id", as: "model_files" });
+        FileType.hasMany(models.FileModel, { foreignKey: "file_type_id", as: "model_files" });
     }
 }
 

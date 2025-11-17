@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { ModelCategory } from "../models";
+import { CategoryModel } from "../models";
 import { SeedsData } from "../../../types/global";
 
 interface MyGlobal {
@@ -77,7 +77,7 @@ export const modelCategoriesSeed = {
         ];
 
         for (const cat of categoriesLevel1) {
-            const [category] = await ModelCategory.findOrCreate({
+            const [category] = await CategoryModel.findOrCreate({
                 where: { slug: cat.slug },
                 defaults: { ...cat, parent_id: null },
             });
@@ -157,7 +157,7 @@ export const modelCategoriesSeed = {
             if (!parentId)
                 throw new Error(`Parent category slug '${cat.parentCategorySlug}' not found`);
 
-            const [category] = await ModelCategory.findOrCreate({
+            const [category] = await CategoryModel.findOrCreate({
                 where: { slug: cat.slug },
                 defaults: {
                     name: cat.name,
@@ -236,7 +236,7 @@ export const modelCategoriesSeed = {
             if (!parentId)
                 throw new Error(`Parent category slug '${cat.parentCategorySlug}' not found`);
 
-            const [category] = await ModelCategory.findOrCreate({
+            const [category] = await CategoryModel.findOrCreate({
                 where: { slug: cat.slug },
                 defaults: {
                     name: cat.name,

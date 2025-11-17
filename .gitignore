@@ -35,6 +35,8 @@ logs/
 #folders
 dist
 tempModels
+certificates
+certs
 
 *.min.js
 coverage/

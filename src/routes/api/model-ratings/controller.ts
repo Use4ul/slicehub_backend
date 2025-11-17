@@ -25,7 +25,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 	}
 });
 
-router.post("/", validateBody(Models.ModelRating as any, { partial: false }), async (req: Request, res: Response) => {
+router.post("/", validateBody(Models.RatingModel as any, { partial: false }), async (req: Request, res: Response) => {
 	try {
 		const created = await modelRatingService.create(req.body);
 		res.status(201).json(created);
@@ -34,7 +34,7 @@ router.post("/", validateBody(Models.ModelRating as any, { partial: false }), as
 	}
 });
 
-router.put("/:id", validateBody(Models.ModelRating as any, { partial: true }), async (req: Request, res: Response) => {
+router.put("/:id", validateBody(Models.RatingModel as any, { partial: true }), async (req: Request, res: Response) => {
 	try {
 		const updated = await modelRatingService.update(req.params.id, req.body);
 		if (!updated) return res.status(404).json({ message: E.NOT_FOUND });

@@ -25,7 +25,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 	}
 });
 
-router.post("/", validateBody(Models.ModelFile as any, { partial: false }), async (req: Request, res: Response) => {
+router.post("/", validateBody(Models.FileModel as any, { partial: false }), async (req: Request, res: Response) => {
 	try {
 		const created = await modelFileService.create(req.body);
 		res.status(201).json(created);
@@ -34,7 +34,7 @@ router.post("/", validateBody(Models.ModelFile as any, { partial: false }), asyn
 	}
 });
 
-router.put("/:id", validateBody(Models.ModelFile as any, { partial: true }), async (req: Request, res: Response) => {
+router.put("/:id", validateBody(Models.FileModel as any, { partial: true }), async (req: Request, res: Response) => {
 	try {
 		const updated = await modelFileService.update(req.params.id, req.body);
 		if (!updated) return res.status(404).json({ message: E.NOT_FOUND });

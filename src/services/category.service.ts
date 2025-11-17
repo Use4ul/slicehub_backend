@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { ModelCategory } from "../../db/sequelize/models/ModelCategory";
+import { CategoryModel } from "../../db/sequelize/models/CategoryModel";
 
 /**
  * Сервис для работы с категориями
  */
-export class CategoryService extends BaseService<ModelCategory> {
+export class CategoryService extends BaseService<CategoryModel> {
 	constructor() {
-		super(Models.ModelCategory);
+		super(Models.CategoryModel);
 	}
 
 	/**
 	 * Найти категорию по slug
 	 */
-	async findBySlug(slug: string): Promise<ModelCategory | null> {
+	async findBySlug(slug: string): Promise<CategoryModel | null> {
 		return await this.findOne({
 			where: { slug }
 		});
@@ -22,7 +22,7 @@ export class CategoryService extends BaseService<ModelCategory> {
 	/**
 	 * Получить категории по родительской категории
 	 */
-	async findByParent(parentId: number): Promise<ModelCategory[]> {
+	async findByParent(parentId: number): Promise<CategoryModel[]> {
 		return await this.findAll({
 			where: { parent_id: parentId }
 		});
@@ -31,7 +31,7 @@ export class CategoryService extends BaseService<ModelCategory> {
 	/**
 	 * Получить корневые категории (без родителя)
 	 */
-	async findRootCategories(): Promise<ModelCategory[]> {
+	async findRootCategories(): Promise<CategoryModel[]> {
 		return await this.findAll({
 			where: { parent_id: null }
 		});

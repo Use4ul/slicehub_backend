@@ -67,7 +67,7 @@ export class CommentAttachment
     }
 
     static associate(models: Models) {
-        CommentAttachment.belongsTo(models.ModelComment, {
+        CommentAttachment.belongsTo(models.CommentModel, {
             foreignKey: "comment_id",
             as: "comment",
             targetKey: "id",

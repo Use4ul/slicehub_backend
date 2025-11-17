@@ -5,16 +5,16 @@ import {
     UserRole,
     Profile,
     StorageType,
-    ModelCategory,
+    CategoryModel,
     Tag,
     License,
-    Model3d,
-    ModelFile,
-    ModelPreview,
-    ModelTag,
-    ModelLicense,
-    ModelRating,
-    ModelComment,
+    ThreeDModel,
+    FileModel,
+    PreviewModel,
+    TagModel,
+    LicenseModel,
+    RatingModel,
+    CommentModel,
     Collection,
     CollectionItem,
 } from "../models";
@@ -144,7 +144,7 @@ export const mockUsersSeed = {
         }
 
         // Получаем категории и теги
-        const categories = await ModelCategory.findAll({ where: { parent_id: null } });
+        const categories = await CategoryModel.findAll({ where: { parent_id: null } });
         const tags = await Tag.findAll({ limit: 20 });
         const licenses = await License.findAll({ limit: 5 });
 
@@ -221,7 +221,7 @@ export const mockUsersSeed = {
                 const isDraft = Math.random() > 0.8;
                 const publishedAt = isDraft ? undefined : randomDate(startDate, endDate);
 
-                const model = await Model3d.create({
+                const model = await ThreeDModel.create({
                     title,
                     description: randomElement(descriptions),
                     slug,
@@ -243,7 +243,7 @@ export const mockUsersSeed = {
                 });
 
                 // Добавляем файлы модели
-                await ModelFile.create({
+                await FileModel.create({
                     model_id: model.id,
                     file_type_id: 1, // STL
                     original_filename: `${slug}.stl`,
@@ -262,7 +262,7 @@ export const mockUsersSeed = {
 
                 // Добавляем превью
                 for (let p = 0; p < randomInt(2, 5); p++) {
-                    await ModelPreview.create({
+                    await PreviewModel.create({
                         model_id: model.id,
                         storage_type_id: s3Storage.id,
                         storage_path: generateS3Url("previews", `${model.id}/preview_${p}.jpg`),
@@ -278,14 +278,14 @@ export const mockUsersSeed = {
                 // Добавляем теги (1-4 тега на модель)
                 const modelTags = tags.sort(() => Math.random() - 0.5).slice(0, randomInt(1, 4));
                 for (const tag of modelTags) {
-                    await ModelTag.create({
+                    await TagModel.create({
                         model_id: model.id,
                         tag_id: tag.id,
                     });
                 }
 
                 // Добавляем лицензию
-                await ModelLicense.create({
+                await LicenseModel.create({
                     model_id: model.id,
                     license_id: randomElement(licenses).id,
                     is_primary: true,
@@ -307,7 +307,7 @@ export const mockUsersSeed = {
             for (const rater of raters) {
                 if (rater.id === model.user_id) continue; // Не лайкать свою модель
 
-                await ModelRating.create({
+                await RatingModel.create({
                     model_id: model.id,
                     user_id: rater.id,
                     rating: randomInt(3, 5),
@@ -328,7 +328,7 @@ export const mockUsersSeed = {
             const commenters = users.sort(() => Math.random() - 0.5).slice(0, commentCount);
 
             for (const commenter of commenters) {
-                await ModelComment.create({
+                await CommentModel.create({
                     model_id: model.id,
                     user_id: commenter.id,
                     parent_comment_id: undefined,
