@@ -25,17 +25,17 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
     `);
 
     await queryInterface.sequelize.query(`
-        CREATE UNIQUE INDEX IF NOT EXISTS model_categories_name_ci_idx 
-        ON model_categories (LOWER(name));
+        CREATE UNIQUE INDEX IF NOT EXISTS categories_model_name_ci_idx 
+        ON categories_model (LOWER(name));
     `);
     await queryInterface.sequelize.query(`
-        CREATE UNIQUE INDEX IF NOT EXISTS model_categories_slug_ci_idx 
-        ON model_categories (LOWER(slug));
+        CREATE UNIQUE INDEX IF NOT EXISTS categories_model_slug_ci_idx 
+        ON categories_model (LOWER(slug));
     `);
 
     await queryInterface.sequelize.query(`
-        CREATE UNIQUE INDEX IF NOT EXISTS models_3d_slug_ci_idx 
-        ON models_3d (LOWER(slug));
+        CREATE UNIQUE INDEX IF NOT EXISTS three_d_models_slug_ci_idx 
+        ON three_d_models (LOWER(slug));
     `);
 
     await queryInterface.sequelize.query(`
@@ -78,9 +78,9 @@ export const down = async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS cities_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS tags_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS tags_slug_ci_idx;`);
-    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS model_categories_name_ci_idx;`);
-    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS model_categories_slug_ci_idx;`);
-    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS models_3d_slug_ci_idx;`);
+    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS categories_model_name_ci_idx;`);
+    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS categories_model_slug_ci_idx;`);
+    await queryInterface.sequelize.query(`DROP INDEX IF EXISTS three_d_models_slug_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS auth_providers_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS roles_name_ci_idx;`);
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS user_statuses_name_ci_idx;`);

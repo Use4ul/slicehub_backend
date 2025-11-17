@@ -69,8 +69,8 @@ export class License
     }
 
     static associate(models: Models) {
-        License.belongsToMany(models.Model3d, {
-            through: models.ModelLicense,
+        License.belongsToMany(models.ThreeDModel, {
+            through: models.LicenseModel,
             foreignKey: "license_id",
             as: "models",
         });

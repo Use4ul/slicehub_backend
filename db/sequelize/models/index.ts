@@ -10,17 +10,17 @@ import { Profile } from "./Profile";
 import { AuthProvider } from "./AuthProvider";
 import { AuthIdentity } from "./AuthIdentity";
 import { UserStatusAudit } from "./UserStatusAudit";
-import { ModelCategory } from "./ModelCategory";
+import { CategoryModel } from "./CategoryModel";
 import { License } from "./License";
-import { Model3d } from "./Model3d";
+import { ThreeDModel } from "./ThreeDModel";
 import { FileType } from "./FileType";
-import { ModelFile } from "./ModelFile";
-import { ModelPreview } from "./ModelPreview";
-import { ModelLicense } from "./ModelLicense";
+import { FileModel } from "./FileModel";
+import { PreviewModel } from "./PreviewModel";
+import { LicenseModel } from "./LicenseModel";
 import { Tag } from "./Tag";
-import { ModelTag } from "./ModelTag";
-import { ModelRating } from "./ModelRating";
-import { ModelComment } from "./ModelComment";
+import { TagModel } from "./TagModel";
+import { RatingModel } from "./RatingModel";
+import { CommentModel } from "./CommentModel";
 import { Collection } from "./Collection";
 import { CollectionItem } from "./CollectionItem";
 import CommentAttachment from "./CommentAttachment";
@@ -40,17 +40,17 @@ export interface Models {
     AuthProvider: ReturnType<typeof AuthProvider.initialize>;
     AuthIdentity: ReturnType<typeof AuthIdentity.initialize>;
     UserStatusAudit: ReturnType<typeof UserStatusAudit.initialize>;
-    ModelCategory: ReturnType<typeof ModelCategory.initialize>;
+    CategoryModel: ReturnType<typeof CategoryModel.initialize>;
     License: ReturnType<typeof License.initialize>;
-    Model3d: ReturnType<typeof Model3d.initialize>;
+    ThreeDModel: ReturnType<typeof ThreeDModel.initialize>;
     FileType: ReturnType<typeof FileType.initialize>;
-    ModelFile: ReturnType<typeof ModelFile.initialize>;
-    ModelPreview: ReturnType<typeof ModelPreview.initialize>;
-    ModelLicense: ReturnType<typeof ModelLicense.initialize>;
+    FileModel: ReturnType<typeof FileModel.initialize>;
+    PreviewModel: ReturnType<typeof PreviewModel.initialize>;
+    LicenseModel: ReturnType<typeof LicenseModel.initialize>;
     Tag: ReturnType<typeof Tag.initialize>;
-    ModelTag: ReturnType<typeof ModelTag.initialize>;
-    ModelRating: ReturnType<typeof ModelRating.initialize>;
-    ModelComment: ReturnType<typeof ModelComment.initialize>;
+    TagModel: ReturnType<typeof TagModel.initialize>;
+    RatingModel: ReturnType<typeof RatingModel.initialize>;
+    CommentModel: ReturnType<typeof CommentModel.initialize>;
     Collection: ReturnType<typeof Collection.initialize>;
     CollectionItem: ReturnType<typeof CollectionItem.initialize>;
     CommentAttachment: ReturnType<typeof CommentAttachment.initialize>;
@@ -73,17 +73,17 @@ export function initializeModels(sequelize: Sequelize): Models {
         AuthProvider: AuthProvider.initialize(sequelize),
         AuthIdentity: AuthIdentity.initialize(sequelize),
         UserStatusAudit: UserStatusAudit.initialize(sequelize),
-        ModelCategory: ModelCategory.initialize(sequelize),
+        CategoryModel: CategoryModel.initialize(sequelize),
         License: License.initialize(sequelize),
-        Model3d: Model3d.initialize(sequelize),
+        ThreeDModel: ThreeDModel.initialize(sequelize),
         FileType: FileType.initialize(sequelize),
-        ModelFile: ModelFile.initialize(sequelize),
-        ModelPreview: ModelPreview.initialize(sequelize),
-        ModelLicense: ModelLicense.initialize(sequelize),
+        FileModel: FileModel.initialize(sequelize),
+        PreviewModel: PreviewModel.initialize(sequelize),
+        LicenseModel: LicenseModel.initialize(sequelize),
         Tag: Tag.initialize(sequelize),
-        ModelTag: ModelTag.initialize(sequelize),
-        ModelRating: ModelRating.initialize(sequelize),
-        ModelComment: ModelComment.initialize(sequelize),
+        TagModel: TagModel.initialize(sequelize),
+        RatingModel: RatingModel.initialize(sequelize),
+        CommentModel: CommentModel.initialize(sequelize),
         Collection: Collection.initialize(sequelize),
         CollectionItem: CollectionItem.initialize(sequelize),
         CommentAttachment: CommentAttachment.initialize(sequelize),
@@ -114,17 +114,17 @@ export {
     AuthProvider,
     AuthIdentity,
     UserStatusAudit,
-    ModelCategory,
+    CategoryModel,
     License,
-    Model3d,
+    ThreeDModel,
     FileType,
-    ModelFile,
-    ModelPreview,
-    ModelLicense,
+    FileModel,
+    PreviewModel,
+    LicenseModel,
     Tag,
-    ModelTag,
-    ModelRating,
-    ModelComment,
+    TagModel,
+    RatingModel,
+    CommentModel,
     Collection,
     CollectionItem,
     CommentAttachment,

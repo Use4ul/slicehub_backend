@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { ModelRating } from "../../db/sequelize/models/ModelRating";
+import { RatingModel } from "../../db/sequelize/models/RatingModel";
 
 /**
  * Сервис для работы с рейтингами моделей
  */
-export class ModelRatingService extends BaseService<ModelRating> {
+export class ModelRatingService extends BaseService<RatingModel> {
 	constructor() {
-		super(Models.ModelRating);
+		super(Models.RatingModel);
 	}
 
 	/**
 	 * Получить рейтинги модели
 	 */
-	async findByModel(modelId: string): Promise<ModelRating[]> {
+	async findByModel(modelId: string): Promise<RatingModel[]> {
 		return await this.findAll({
 			where: { model_id: modelId }
 		});
@@ -22,7 +22,7 @@ export class ModelRatingService extends BaseService<ModelRating> {
 	/**
 	 * Получить рейтинг пользователя для модели
 	 */
-	async findUserRating(modelId: string, userId: string): Promise<ModelRating | null> {
+	async findUserRating(modelId: string, userId: string): Promise<RatingModel | null> {
 		return await this.findOne({
 			where: { model_id: modelId, user_id: userId }
 		});
@@ -42,7 +42,7 @@ export class ModelRatingService extends BaseService<ModelRating> {
 	/**
 	 * Получить рейтинги пользователя
 	 */
-	async findByUser(userId: string): Promise<ModelRating[]> {
+	async findByUser(userId: string): Promise<RatingModel[]> {
 		return await this.findAll({
 			where: { user_id: userId }
 		});

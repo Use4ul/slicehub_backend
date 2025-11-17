@@ -3,10 +3,12 @@ import { authenticateDB } from "./sequelize";
 import { syncDatabase } from "./sequelize/sync";
 import { runMigrations } from "./migrations/runner";
 import { seedDatabase } from "./sequelize/seeds";
+import { ensureSchema } from "./sequelize/ensure-schema";
 
 export async function initDB(): Promise<void> {
     try {
         await authenticateDB(); // создание коннекта к базе
+        await ensureSchema(); // создание схемы, если её нет
         await syncDatabase(); // инициализация моделей
         await runMigrations(); // ручные миграции
         await seedDatabase(); // наполнение таблиц

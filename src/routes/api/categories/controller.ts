@@ -8,7 +8,7 @@ const router = Router();
 
 router.get("/schema", (req: Request, res: Response) => {
 	try {
-		const schema = getModelSchema(Models.ModelCategory as any);
+		const schema = getModelSchema(Models.CategoryModel as any);
 		res.json(schema);
 	} catch (e) {
 		res.status(500).json({ message: "Failed to get schema" });
@@ -34,7 +34,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 	}
 });
 
-router.post("/", validateBody(Models.ModelCategory as any, { partial: false }), async (req: Request, res: Response) => {
+router.post("/", validateBody(Models.CategoryModel as any, { partial: false }), async (req: Request, res: Response) => {
 	try {
 		const created = await categoryService.create(req.body);
 		res.status(201).json(created);
@@ -43,7 +43,7 @@ router.post("/", validateBody(Models.ModelCategory as any, { partial: false }), 
 	}
 });
 
-router.put("/:id", validateBody(Models.ModelCategory as any, { partial: true }), async (req: Request, res: Response) => {
+router.put("/:id", validateBody(Models.CategoryModel as any, { partial: true }), async (req: Request, res: Response) => {
 	try {
 		const updated = await categoryService.update(req.params.id, req.body);
 		if (!updated) return res.status(404).json({ message: E.NOT_FOUND });

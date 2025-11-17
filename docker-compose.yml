@@ -68,10 +68,13 @@ services:
     container_name: slicehub_backend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
       NODE_ENV: production
-      PORT: 3000
+      PORT: 3001
+    user: "1001:1001"
+    volumes:
+      - ./conf.json:/app/conf.json:rw
     depends_on:
       postgres:
         condition: service_healthy
@@ -79,10 +82,10 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-      nats:
-        condition: service_started
+      # nats:
+      #   condition: service_started
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/monitoring/healthcheck', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/monitoring/healthcheck', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
       interval: 30s
       timeout: 10s
       retries: 3

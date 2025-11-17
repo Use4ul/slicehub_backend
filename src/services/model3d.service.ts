@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { Model3d } from "../../db/sequelize/models/Model3d";
+import { ThreeDModel } from "../../db/sequelize/models/ThreeDModel";
 
 /**
  * Сервис для работы с 3D моделями
  */
-export class Model3dService extends BaseService<Model3d> {
+export class Model3dService extends BaseService<ThreeDModel> {
 	constructor() {
-		super(Models.Model3d);
+		super(Models.ThreeDModel);
 	}
 
 	/**
 	 * Получить модели по пользователю
 	 */
-	async findByUser(userId: string): Promise<Model3d[]> {
+	async findByUser(userId: string): Promise<ThreeDModel[]> {
 		return await this.findAll({
 			where: { user_id: userId }
 		});
@@ -22,7 +22,7 @@ export class Model3dService extends BaseService<Model3d> {
 	/**
 	 * Получить модели по категории
 	 */
-	async findByCategory(categoryId: number): Promise<Model3d[]> {
+	async findByCategory(categoryId: number): Promise<ThreeDModel[]> {
 		return await this.findAll({
 			where: { category_id: categoryId }
 		});
@@ -31,7 +31,7 @@ export class Model3dService extends BaseService<Model3d> {
 	/**
 	 * Получить модели по slug
 	 */
-	async findBySlug(slug: string): Promise<Model3d | null> {
+	async findBySlug(slug: string): Promise<ThreeDModel | null> {
 		return await this.findOne({
 			where: { slug }
 		});
@@ -40,7 +40,7 @@ export class Model3dService extends BaseService<Model3d> {
 	/**
 	 * Поиск моделей по названию (частичное совпадение)
 	 */
-	async searchByTitle(searchTerm: string): Promise<Model3d[]> {
+	async searchByTitle(searchTerm: string): Promise<ThreeDModel[]> {
 		const { Op } = require("sequelize");
 		return await this.findAll({
 			where: {

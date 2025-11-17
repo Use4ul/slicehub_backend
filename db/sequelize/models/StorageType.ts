@@ -42,8 +42,8 @@ export class StorageType
 
     static associate(models: Models) {
         StorageType.hasMany(models.Profile, { foreignKey: "avatar_storage_type", as: "profiles" });
-        StorageType.hasMany(models.ModelFile, { foreignKey: "storage_type_id", as: "model_files" });
-        StorageType.hasMany(models.ModelPreview, {
+        StorageType.hasMany(models.FileModel, { foreignKey: "storage_type_id", as: "model_files" });
+        StorageType.hasMany(models.PreviewModel, {
             foreignKey: "storage_type_id",
             as: "model_previews",
         });

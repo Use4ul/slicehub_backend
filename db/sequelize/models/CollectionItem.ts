@@ -39,7 +39,7 @@ export class CollectionItem
             foreignKey: "collection_id",
             as: "collection",
         });
-        CollectionItem.belongsTo(models.Model3d, { foreignKey: "model_id", as: "model" });
+        CollectionItem.belongsTo(models.ThreeDModel, { foreignKey: "model_id", as: "model" });
     }
 }
 

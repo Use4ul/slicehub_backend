@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { ModelTag } from "../../db/sequelize/models/ModelTag";
+import { TagModel } from "../../db/sequelize/models/TagModel";
 
 /**
  * Сервис для работы с тегами моделей
  */
-export class ModelTagService extends BaseService<ModelTag> {
+export class ModelTagService extends BaseService<TagModel> {
 	constructor() {
-		super(Models.ModelTag);
+		super(Models.TagModel);
 	}
 
 	/**
 	 * Получить теги модели
 	 */
-	async findByModel(modelId: number): Promise<ModelTag[]> {
+	async findByModel(modelId: number): Promise<TagModel[]> {
 		return await this.findAll({
 			where: { model_id: modelId }
 		});
@@ -22,7 +22,7 @@ export class ModelTagService extends BaseService<ModelTag> {
 	/**
 	 * Получить модели с определенным тегом
 	 */
-	async findByTag(tagId: number): Promise<ModelTag[]> {
+	async findByTag(tagId: number): Promise<TagModel[]> {
 		return await this.findAll({
 			where: { tag_id: tagId }
 		});
@@ -31,7 +31,7 @@ export class ModelTagService extends BaseService<ModelTag> {
 	/**
 	 * Добавить тег к модели (если еще не добавлен)
 	 */
-	async addTagToModel(modelId: string, tagId: number): Promise<ModelTag> {
+	async addTagToModel(modelId: string, tagId: number): Promise<TagModel> {
 		const existing = await this.findOne({
 			where: { model_id: modelId, tag_id: tagId }
 		});

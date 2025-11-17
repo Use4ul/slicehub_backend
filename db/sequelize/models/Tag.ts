@@ -34,8 +34,8 @@ export class Tag extends Model<TagAttributes, TagCreationAttributes> implements 
     }
 
     static associate(models: Models) {
-        Tag.belongsToMany(models.Model3d, {
-            through: models.ModelTag,
+        Tag.belongsToMany(models.ThreeDModel, {
+            through: models.TagModel,
             foreignKey: "tag_id",
             as: "models",
         });

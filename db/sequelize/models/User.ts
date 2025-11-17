@@ -99,9 +99,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
         User.hasOne(models.Profile, { foreignKey: "user_id", as: "profile" });
         User.hasMany(models.UserToken, { foreignKey: "user_id", as: "tokens" });
         User.hasMany(models.AuthIdentity, { foreignKey: "user_id", as: "auth_identities" });
-        User.hasMany(models.Model3d, { foreignKey: "user_id", as: "models" });
-        User.hasMany(models.ModelComment, { foreignKey: "user_id", as: "comments" });
-        User.hasMany(models.ModelRating, { foreignKey: "user_id", as: "ratings" });
+        User.hasMany(models.ThreeDModel, { foreignKey: "user_id", as: "models" });
+        User.hasMany(models.CommentModel, { foreignKey: "user_id", as: "comments" });
+        User.hasMany(models.RatingModel, { foreignKey: "user_id", as: "ratings" });
         User.hasMany(models.Collection, { foreignKey: "user_id", as: "collections" });
         User.hasMany(models.UserStatusAudit, {
             foreignKey: "changed_by",

@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { ModelPreview } from "../../db/sequelize/models/ModelPreview";
+import { PreviewModel } from "../../db/sequelize/models/PreviewModel";
 
 /**
  * Сервис для работы с превью моделей
  */
-export class ModelPreviewService extends BaseService<ModelPreview> {
+export class ModelPreviewService extends BaseService<PreviewModel> {
 	constructor() {
-		super(Models.ModelPreview);
+		super(Models.PreviewModel);
 	}
 
 	/**
 	 * Получить превью по модели
 	 */
-	async findByModel(modelId: number): Promise<ModelPreview[]> {
+	async findByModel(modelId: number): Promise<PreviewModel[]> {
 		return await this.findAll({
 			where: { model_id: modelId },
 			order: [['preview_order', 'ASC']]
@@ -23,7 +23,7 @@ export class ModelPreviewService extends BaseService<ModelPreview> {
 	/**
 	 * Получить главное превью модели
 	 */
-	async findMainPreview(modelId: number): Promise<ModelPreview | null> {
+	async findMainPreview(modelId: number): Promise<PreviewModel | null> {
 		return await this.findOne({
 			where: { model_id: modelId, preview_order: 1 }
 		});

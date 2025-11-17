@@ -40,6 +40,12 @@ const dbConnection = new Sequelize(dbSettings.database, auth.login, auth.passwor
         acquire: 30000,
         idle: 10000,
     },
+    ...(dbSettings.schema && {
+        schema: dbSettings.schema,
+        define: {
+            schema: dbSettings.schema,
+        },
+    }),
 });
 
 const Models = initializeModels(dbConnection);

@@ -25,7 +25,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 	}
 });
 
-router.post("/", validateBody(Models.ModelTag as any, { partial: false }), async (req: Request, res: Response) => {
+router.post("/", validateBody(Models.TagModel as any, { partial: false }), async (req: Request, res: Response) => {
 	try {
 		const created = await modelTagService.create(req.body);
 		res.status(201).json(created);
@@ -34,7 +34,7 @@ router.post("/", validateBody(Models.ModelTag as any, { partial: false }), async
 	}
 });
 
-router.put("/:id", validateBody(Models.ModelTag as any, { partial: true }), async (req: Request, res: Response) => {
+router.put("/:id", validateBody(Models.TagModel as any, { partial: true }), async (req: Request, res: Response) => {
 	try {
 		const updated = await modelTagService.update(req.params.id, req.body);
 		if (!updated) return res.status(404).json({ message: E.NOT_FOUND });

@@ -48,7 +48,7 @@ export class Collection
 
     static associate(models: Models) {
         Collection.belongsTo(models.User, { foreignKey: "user_id", as: "user" });
-        Collection.belongsToMany(models.Model3d, {
+        Collection.belongsToMany(models.ThreeDModel, {
             through: models.CollectionItem,
             foreignKey: "collection_id",
             as: "models",

@@ -1,19 +1,19 @@
 import { BaseService } from "./base.service";
 import Models from "../../db/sequelize";
-import { ModelLicense } from "../../db/sequelize/models/ModelLicense";
+import { LicenseModel } from "../../db/sequelize/models/LicenseModel";
 
 /**
  * Сервис для работы с лицензиями моделей
  */
-export class ModelLicenseService extends BaseService<ModelLicense> {
+export class ModelLicenseService extends BaseService<LicenseModel> {
 	constructor() {
-		super(Models.ModelLicense);
+		super(Models.LicenseModel);
 	}
 
 	/**
 	 * Получить лицензии модели
 	 */
-	async findByModel(modelId: number): Promise<ModelLicense[]> {
+	async findByModel(modelId: number): Promise<LicenseModel[]> {
 		return await this.findAll({
 			where: { model_id: modelId }
 		});
@@ -22,7 +22,7 @@ export class ModelLicenseService extends BaseService<ModelLicense> {
 	/**
 	 * Получить модели с определенной лицензией
 	 */
-	async findByLicense(licenseId: number): Promise<ModelLicense[]> {
+	async findByLicense(licenseId: number): Promise<LicenseModel[]> {
 		return await this.findAll({
 			where: { license_id: licenseId }
 		});
