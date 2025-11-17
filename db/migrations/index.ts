@@ -2,6 +2,7 @@ import { QueryInterface } from "sequelize";
 import { syncLogger } from "../../sys/logger";
 import { Migration, MigrationRecord, MigrationManagerOptions } from "./types";
 import { EMOJI } from "../../src/utils/emojis";
+import { getSchemaPrefix } from "./utils";
 
 // Импорты миграций
 import migration001 from "./migrationsFiles/001-create-case-insensitive-indexes";
@@ -15,16 +16,18 @@ const migrationsRegistry: { [key: number]: Migration } = {
 
 export class MigrationManager {
     private queryInterface: QueryInterface;
+    private schemaPrefix: string;
 
     constructor(queryInterface: QueryInterface) {
         this.queryInterface = queryInterface;
+        this.schemaPrefix = getSchemaPrefix();
     }
 
     // Получает список выполненных миграций
     private async getExecutedMigrations(): Promise<MigrationRecord[]> {
         const [results] = await this.queryInterface.sequelize.query(`
             SELECT id, name, executed_at 
-            FROM migrations 
+            FROM ${this.schemaPrefix}"migrations" 
             ORDER BY id ASC
         `);
 
@@ -35,7 +38,7 @@ export class MigrationManager {
     private async addMigrationRecord(name: string): Promise<void> {
         await this.queryInterface.sequelize.query(
             `
-            INSERT INTO migrations (name, executed_at) 
+            INSERT INTO ${this.schemaPrefix}"migrations" (name, executed_at) 
             VALUES (:name, CURRENT_TIMESTAMP)
         `,
             {
@@ -48,7 +51,7 @@ export class MigrationManager {
     private async removeMigrationRecord(id: number): Promise<void> {
         await this.queryInterface.sequelize.query(
             `
-            DELETE FROM migrations WHERE id = :id
+            DELETE FROM ${this.schemaPrefix}"migrations" WHERE id = :id
         `,
             {
                 replacements: { id },
