@@ -121,14 +121,55 @@ export const swaggerSpec = {
       get: {
         summary: 'Получить список всех 3D моделей',
         tags: ['3D Models'],
+        parameters: [
+          {
+            in: 'query',
+            name: 'limit',
+            schema: {
+              type: 'integer',
+              default: 50,
+              minimum: 1,
+              maximum: 100,
+            },
+            description: 'Количество записей на странице',
+          },
+          {
+            in: 'query',
+            name: 'offset',
+            schema: {
+              type: 'integer',
+              default: 0,
+              minimum: 0,
+            },
+            description: 'Смещение от начала списка',
+          },
+        ],
         responses: {
           '200': {
-            description: 'Список 3D моделей',
+            description: 'Список 3D моделей с пагинацией',
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/ThreeDModel' },
+                  type: 'object',
+                  properties: {
+                    count: {
+                      type: 'integer',
+                      description: 'Количество записей в текущем ответе',
+                    },
+                    pagination: {
+                      type: 'object',
+                      properties: {
+                        limit: { type: 'integer' },
+                        offset: { type: 'integer' },
+                        total: { type: 'integer', description: 'Общее количество записей в БД' },
+                        hasMore: { type: 'boolean', description: 'Есть ли еще записи' },
+                      },
+                    },
+                    data: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/ThreeDModel' },
+                    },
+                  },
                 },
               },
             },
@@ -261,14 +302,55 @@ export const swaggerSpec = {
       get: {
         summary: 'Получить все файлы моделей',
         tags: ['Model Files'],
+        parameters: [
+          {
+            in: 'query',
+            name: 'limit',
+            schema: {
+              type: 'integer',
+              default: 50,
+              minimum: 1,
+              maximum: 100,
+            },
+            description: 'Количество записей на странице',
+          },
+          {
+            in: 'query',
+            name: 'offset',
+            schema: {
+              type: 'integer',
+              default: 0,
+              minimum: 0,
+            },
+            description: 'Смещение от начала списка',
+          },
+        ],
         responses: {
           '200': {
-            description: 'Список всех файлов моделей',
+            description: 'Список всех файлов моделей с пагинацией',
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/FileModel' },
+                  type: 'object',
+                  properties: {
+                    count: {
+                      type: 'integer',
+                      description: 'Количество записей в текущем ответе',
+                    },
+                    pagination: {
+                      type: 'object',
+                      properties: {
+                        limit: { type: 'integer' },
+                        offset: { type: 'integer' },
+                        total: { type: 'integer', description: 'Общее количество записей в БД' },
+                        hasMore: { type: 'boolean', description: 'Есть ли еще записи' },
+                      },
+                    },
+                    data: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/FileModel' },
+                    },
+                  },
                 },
               },
             },
@@ -417,14 +499,55 @@ export const swaggerSpec = {
       get: {
         summary: 'Получить список всех пользователей',
         tags: ['Users'],
+        parameters: [
+          {
+            in: 'query',
+            name: 'limit',
+            schema: {
+              type: 'integer',
+              default: 50,
+              minimum: 1,
+              maximum: 100,
+            },
+            description: 'Количество записей на странице',
+          },
+          {
+            in: 'query',
+            name: 'offset',
+            schema: {
+              type: 'integer',
+              default: 0,
+              minimum: 0,
+            },
+            description: 'Смещение от начала списка',
+          },
+        ],
         responses: {
           '200': {
-            description: 'Список пользователей',
+            description: 'Список пользователей с пагинацией',
             content: {
               'application/json': {
                 schema: {
-                  type: 'array',
-                  items: { $ref: '#/components/schemas/User' },
+                  type: 'object',
+                  properties: {
+                    count: {
+                      type: 'integer',
+                      description: 'Количество записей в текущем ответе',
+                    },
+                    pagination: {
+                      type: 'object',
+                      properties: {
+                        limit: { type: 'integer' },
+                        offset: { type: 'integer' },
+                        total: { type: 'integer', description: 'Общее количество записей в БД' },
+                        hasMore: { type: 'boolean', description: 'Есть ли еще записи' },
+                      },
+                    },
+                    data: {
+                      type: 'array',
+                      items: { $ref: '#/components/schemas/User' },
+                    },
+                  },
                 },
               },
             },
