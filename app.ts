@@ -77,12 +77,13 @@ const bootstrap = async (): Promise<void> => {
         await initDB();
 
         setupCpuMonitoring(server);
+        const swaggerPath = process.env.NODE_ENV === 'production' ? '/backend' : '/api-docs';
         mainLogger.info(
             "\n🏠 Monitoring:",
             `\nhttp://localhost:${PORT}/monitoring/ui`,
             `\nhttp://localhost:${PORT}/monitoring/healthcheck`,
             "\n📚 API Documentation:",
-            `\nhttp://localhost:${PORT}/api-docs`
+            `\nhttp://localhost:${PORT}${swaggerPath}`
         );
     } catch (error) {
         const err = error as Error;
