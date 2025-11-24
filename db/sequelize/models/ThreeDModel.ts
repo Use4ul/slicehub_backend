@@ -9,11 +9,7 @@ interface ThreeDModelAttributes {
     category_id: number;
     user_id: string;
     is_public: boolean;
-    is_for_sale: boolean;
-    price?: number;
     print_time_estimate?: number;
-    filament_estimate?: number;
-    difficulty_level: number;
     download_count: number;
     view_count: number;
     like_count: number;
@@ -38,11 +34,7 @@ export class ThreeDModel
     public category_id!: number;
     public user_id!: string;
     public is_public!: boolean;
-    public is_for_sale!: boolean;
-    public price?: number;
     public print_time_estimate?: number;
-    public filament_estimate?: number;
-    public difficulty_level!: number;
     public download_count!: number;
     public view_count!: number;
     public like_count!: number;
@@ -66,16 +58,7 @@ export class ThreeDModel
                 category_id: { type: DataTypes.INTEGER, allowNull: false },
                 user_id: { type: DataTypes.UUID, allowNull: false },
                 is_public: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
-                is_for_sale: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-                price: { type: DataTypes.DECIMAL(8, 2), allowNull: true },
                 print_time_estimate: { type: DataTypes.INTEGER, allowNull: true },
-                filament_estimate: { type: DataTypes.INTEGER, allowNull: true },
-                difficulty_level: {
-                    type: DataTypes.SMALLINT,
-                    allowNull: false,
-                    defaultValue: 1,
-                    validate: { min: 1, max: 10 },
-                },
                 download_count: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
                 view_count: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
                 like_count: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },

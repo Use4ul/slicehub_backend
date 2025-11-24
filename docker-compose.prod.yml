@@ -1,0 +1,138 @@
+# Production Docker Compose configuration
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: slicehub_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-slicehub}
+      POSTGRES_USER: ${DB_USER:-slicehub_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-slicehub_password}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-slicehub_user} -d ${DB_NAME:-slicehub}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - slicehub-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: slicehub_redis
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - slicehub-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: slicehub_minio
+    restart: always
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY:-minioadmin}
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - slicehub-network
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: slicehub_minio_init
+    depends_on:
+      minio:
+        condition: service_healthy
+    volumes:
+      - ./init-scripts/minio-init.sh:/minio-init.sh
+    entrypoint: /bin/sh
+    command: /minio-init.sh
+    restart: "no"
+    networks:
+      - slicehub-network
+
+  nats:
+    image: nats:latest
+    container_name: slicehub_nats
+    restart: always
+    ports:
+      - "${NATS_CLIENT_PORT:-4222}:4222"
+      - "${NATS_MONITORING_PORT:-8222}:8222"
+    command: ["-js", "-m", "8222"]
+    networks:
+      - slicehub-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slicehub_backend
+    restart: always
+    ports:
+      - "${APP_PORT:-3001}:3001"
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT:-3001}
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:-minioadmin}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-minioadmin}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      S3_FORCE_PATH_STYLE: "true"
+    user: "1001:1001"
+    volumes:
+      - ./conf.json:/app/conf.json:ro
+      - app_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/monitoring/healthcheck', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - slicehub-network
+
+networks:
+  slicehub-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+  app_logs:
+    driver: local
+

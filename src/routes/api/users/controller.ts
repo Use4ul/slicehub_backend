@@ -3,8 +3,10 @@ import Models from "../../../../db/sequelize";
 import { ApiErrorMessages as E } from "../errors";
 import { validateBody, getModelSchema } from "../validate";
 import { userService } from "../../../services";
+import { formatListResponse } from "../../../utils/response-formatter";
 
 const router = Router();
+
 
 router.get("/schema", (req: Request, res: Response) => {
 	try {
@@ -15,14 +17,27 @@ router.get("/schema", (req: Request, res: Response) => {
 	}
 });
 
+
 router.get("/", async (req: Request, res: Response) => {
 	try {
-		const data = await userService.findAll();
-		res.json(data);
+		// Пагинация: по умолчанию первые 50 записей
+		const limit = parseInt(req.query.limit as string) || 50;
+		const offset = parseInt(req.query.offset as string) || 0;
+		
+		const data = await userService.findAll({
+			limit,
+			offset,
+			order: [['created_at', 'DESC']],
+		});
+		
+		const total = await userService.count();
+		
+		res.json(formatListResponse(data, { limit, offset, total }));
 	} catch (e) {
 		res.status(500).json({ message: E.LIST_FAILED });
 	}
 });
+
 
 router.get("/:id", async (req: Request, res: Response) => {
 	try {

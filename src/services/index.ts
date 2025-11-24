@@ -41,3 +41,6 @@ export { authIdentityService, AuthIdentityService } from "./auth-identity.servic
 export { fileTypeService, FileTypeService } from "./file-type.service";
 export { tokenTypeService, TokenTypeService } from "./token-type.service";
 export { licenseService, LicenseService } from "./license.service";
+
+// Storage Services
+export { s3StorageService, S3StorageService } from "./s3-storage.service";

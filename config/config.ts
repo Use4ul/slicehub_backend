@@ -39,6 +39,22 @@ export interface MonitoringSettings {
     osType: string;
 }
 
+export interface S3Buckets {
+    models: string;
+    previews: string;
+    avatars: string;
+    attachments: string;
+}
+
+export interface S3Config {
+    endpoint: string;
+    region: string;
+    accessKeyId: string;
+    secretAccessKey: string;
+    buckets: S3Buckets;
+    forcePathStyle: boolean;
+}
+
 export interface Configuration {
     appName: string;
     settings: Settings;
@@ -49,5 +65,6 @@ export interface Configuration {
         [key: string]: DatabaseAuth;
     };
     monitoringSettings: MonitoringSettings;
+    s3?: S3Config;
     devUsers: string[];
 }

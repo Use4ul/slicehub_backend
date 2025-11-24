@@ -90,14 +90,26 @@ export async function seedDatabase(): Promise<void> {
         syncLogger.info(`${EMOJI.SUCCESS} Default seeds completed`);
 
         // Проверяем, нужно ли выполнять mock seeds
-        if (!mockSeedingOptions.enableMockSeeds) {
-            syncLogger.info(`${EMOJI.SKIP} Mock seeding disabled in config. Skipping...`);
+        // Приоритет: ENV переменная > conf.json
+        const enableMockSeeds = process.env.ENABLE_MOCK_SEEDS === "true" 
+            || (process.env.ENABLE_MOCK_SEEDS === undefined && mockSeedingOptions.enableMockSeeds);
+        
+        const seedSource = process.env.ENABLE_MOCK_SEEDS !== undefined ? "ENV" : "conf.json";
+        
+        if (!enableMockSeeds) {
+            syncLogger.info(`${EMOJI.SKIP} Mock seeding disabled (source: ${seedSource}). Skipping...`);
             return;
         }
 
         // Выполняем mock seeds указанное количество раз
-        const runCount = mockSeedingOptions.mockSeedsRunCount || 1;
-        syncLogger.info(`${EMOJI.MOCK_DATA} Running mock seeds ${runCount} time(s)...`);
+        // Приоритет: ENV переменная > conf.json
+        const runCount = parseInt(
+            process.env.MOCK_SEEDS_RUN_COUNT || 
+            String(mockSeedingOptions.mockSeedsRunCount || 1)
+        );
+        const countSource = process.env.MOCK_SEEDS_RUN_COUNT !== undefined ? "ENV" : "conf.json";
+        
+        syncLogger.info(`${EMOJI.MOCK_DATA} Running mock seeds ${runCount} time(s) (source: ${countSource})...`);
         
         for (let iteration = 1; iteration <= runCount; iteration++) {
             if (runCount > 1) {

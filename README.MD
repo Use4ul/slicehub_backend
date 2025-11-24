@@ -198,6 +198,68 @@ npm run lint:fix         # Автоисправление
 npm run migration:create # Создать новую миграцию
 ```
 
+## Docker Compose
+
+### Быстрый старт с Docker
+
+```bash
+# Запустить все сервисы (PostgreSQL, Redis, MinIO, NATS, App)
+docker-compose up -d
+
+# Проверить статус
+docker-compose ps
+
+# Просмотр логов
+docker-compose logs -f app
+```
+
+### Доступные сервисы
+
+| Сервис | Порт | Описание |
+|--------|------|----------|
+| Backend API | 3001 | http://localhost:3001 |
+| PostgreSQL | 5432 | База данных |
+| Redis | 6379 | Кэш и очереди |
+| MinIO S3 API | 9000 | http://localhost:9000 |
+| MinIO Console | 9001 | http://localhost:9001 |
+| NATS | 4222 | Messaging |
+
+### S3 Хранилище (MinIO)
+
+MinIO предоставляет S3-совместимое хранилище для файлов:
+
+**Доступ к Web Console:**
+- URL: http://localhost:9001
+- Username: `minioadmin`
+- Password: `minioadmin`
+
+**Автоматически созданные бакеты:**
+- `slicehub-models` - 3D модели
+- `slicehub-previews` - Превью изображения
+- `slicehub-avatars` - Аватары пользователей
+- `slicehub-attachments` - Вложения
+
+**Использование в коде:**
+
+```typescript
+import { s3StorageService } from './services';
+
+// Загрузить файл
+await s3StorageService.uploadFile('models', 'path/to/file.stl', buffer);
+
+// Скачать файл
+const data = await s3StorageService.downloadFile('models', 'path/to/file.stl');
+
+// Получить временную ссылку
+const url = await s3StorageService.getPresignedUrl('models', 'path/to/file.stl', 3600);
+```
+
+📖 **Документация:**
+- [Руководство по S3 хранилищу](docs/S3_STORAGE_GUIDE.md)
+- [Примеры использования S3 API](docs/S3_API_EXAMPLE.md)
+- [API для загрузки файлов моделей](docs/MODEL_FILES_API.md) ⭐
+- [Развертывание с Docker](docs/DOCKER_DEPLOYMENT.md)
+
 ## Стек
 
-Node.js • TypeScript • Express • Sequelize • PostgreSQL • Swagger • log4js
+Node.js • TypeScript • Express • Sequelize • PostgreSQL • Redis • MinIO (S3) • NATS • Swagger • log4js • Docker

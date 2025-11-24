@@ -17,6 +17,8 @@ RUN npm ci && npm cache clean --force
 
 COPY --from=builder /app/dist ./
 COPY --from=builder /app/sys ./sys
+COPY --from=builder /app/files ./files
+COPY --from=builder /app/public ./public
 COPY conf.json ./
 
 RUN addgroup -g 1001 -S nodejs && \
