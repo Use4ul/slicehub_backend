@@ -5,14 +5,29 @@ export function setupSwagger(app: Express): void {
   // Минимальный CSS - только скрываем топбар
   const minimalCSS = '.swagger-ui .topbar { display: none; }';
   
-  // Путь к Swagger UI зависит от окружения
-  const swaggerPath = process.env.NODE_ENV === 'production' ? '/backend' : '/api-docs';
+  // Динамически изменяем спецификацию в зависимости от окружения
+  const spec = { ...swaggerSpec };
+  if (process.env.NODE_ENV === 'production') {
+    // На production nginx перенаправляет /backend/* на бэкенд /api/*
+    // Поэтому убираем /api/ из путей и добавляем production сервер
+    const productionPaths: any = {};
+    for (const [path, methods] of Object.entries(spec.paths)) {
+      const newPath = path.replace(/^\/api/, '');
+      productionPaths[newPath] = methods;
+    }
+    spec.paths = productionPaths;
+    spec.servers = [
+      {
+        url: 'https://slicehub.ru/backend',
+        description: 'Production server',
+      },
+    ];
+  }
   
-  app.use(swaggerPath, swaggerUi.serve, swaggerUi.setup(null, {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spec, {
     customCss: minimalCSS,
     customSiteTitle: 'SliceHub API Documentation',
     swaggerOptions: {
-      url: '/swagger.json', // Загружаем статический JSON файл
       displayRequestDuration: true,
       tryItOutEnabled: true,
       filter: true,
@@ -25,5 +40,5 @@ export function setupSwagger(app: Express): void {
     },
   }));
   
-  console.log(`📚 Swagger documentation available at ${swaggerPath}`);
+  console.log('📚 Swagger documentation available at /api-docs');
 }
