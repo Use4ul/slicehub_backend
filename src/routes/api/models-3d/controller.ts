@@ -3,17 +3,32 @@ import Models from "../../../../db/sequelize";
 import { ApiErrorMessages as E } from "../errors";
 import { validateBody } from "../validate";
 import { model3dService } from "../../../services";
+import { formatListResponse } from "../../../utils/response-formatter";
 
 const router = Router();
 
+
 router.get("/", async (req: Request, res: Response) => {
 	try {
-		const data = await model3dService.findAll();
-		res.json(data);
+		// Пагинация: по умолчанию первые 50 записей
+		const limit = parseInt(req.query.limit as string) || 50;
+		const offset = parseInt(req.query.offset as string) || 0;
+		
+		const data = await model3dService.findAll({
+			limit,
+			offset,
+			order: [['created_at', 'DESC']],
+		});
+		
+		// Возвращаем также общее количество для пагинации
+		const total = await model3dService.count();
+		
+		res.json(formatListResponse(data, { limit, offset, total }));
 	} catch (e) {
 		res.status(500).json({ message: E.LIST_FAILED });
 	}
 });
+
 
 router.get("/:id", async (req: Request, res: Response) => {
 	try {
@@ -25,6 +40,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 	}
 });
 
+
 router.post("/", validateBody(Models.ThreeDModel as any, { partial: false }), async (req: Request, res: Response) => {
 	try {
 		const created = await model3dService.create(req.body);
@@ -33,6 +49,7 @@ router.post("/", validateBody(Models.ThreeDModel as any, { partial: false }), as
 		res.status(400).json({ message: E.CREATE_FAILED });
 	}
 });
+
 
 router.put("/:id", validateBody(Models.ThreeDModel as any, { partial: true }), async (req: Request, res: Response) => {
 	try {
@@ -43,6 +60,7 @@ router.put("/:id", validateBody(Models.ThreeDModel as any, { partial: true }), a
 		res.status(400).json({ message: E.UPDATE_FAILED });
 	}
 });
+
 
 router.delete("/:id", async (req: Request, res: Response) => {
 	try {

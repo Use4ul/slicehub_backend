@@ -21,6 +21,10 @@ import {
 import { generateSlugWithUsername } from "../../../src/utils/sanitizers/slug";
 import { syncLogger } from "../../../sys/logger";
 import { EMOJI } from "../../../src/utils/emojis";
+import * as fs from "fs";
+import * as path from "path";
+import * as crypto from "crypto";
+import { s3StorageService } from "../../../src/services";
 
 const firstNames = [
     "Алексей", "Дмитрий", "Иван", "Сергей", "Андрей", "Михаил", "Александр", "Владимир",
@@ -173,10 +177,34 @@ export const mockUsersSeed = {
                 created_at: randomDate(startDate, endDate),
             });
 
+            // Загружаем аватар в S3
+            let avatarPath: string | undefined;
+            try {
+                const avatarFilePath = path.join(__dirname, "../../../files/default/default_avatar.jpg");
+                syncLogger.info(`🔍 Checking avatar file at: ${avatarFilePath}`);
+                
+                if (fs.existsSync(avatarFilePath)) {
+                    const avatarBuffer = fs.readFileSync(avatarFilePath);
+                    const avatarFilename = `${user.id}.jpg`;
+                    const avatarS3Key = `users/${avatarFilename}`;
+                    
+                    syncLogger.info(`📤 Uploading avatar for user ${userName} (${avatarBuffer.length} bytes) to ${avatarS3Key}`);
+                    
+                    // Загружаем в S3
+                    await s3StorageService.uploadFile("avatars", avatarS3Key, avatarBuffer, "image/jpeg");
+                    avatarPath = avatarS3Key;
+                    syncLogger.info(`✅ Avatar uploaded successfully for user ${userName}`);
+                } else {
+                    syncLogger.warn(`⚠️ Avatar file not found: ${avatarFilePath}`);
+                }
+            } catch (error) {
+                syncLogger.error(`❌ Failed to upload avatar for user ${userName}: ${error}`);
+            }
+
             // Создаем профиль
             await Profile.create({
                 user_id: user.id,
-                avatar_filename: generateS3Url("avatars", `${user.id}.jpg`),
+                avatar_filename: avatarPath,
                 avatar_storage_type: s3Storage.id,
                 first_name: firstName,
                 last_name: lastName,
@@ -228,11 +256,7 @@ export const mockUsersSeed = {
                     category_id: randomElement(categories).id,
                     user_id: user.id,
                     is_public: !isDraft,
-                    is_for_sale: Math.random() > 0.7,
-                    price: Math.random() > 0.7 ? randomInt(100, 5000) : undefined,
                     print_time_estimate: randomInt(60, 720), // минуты
-                    filament_estimate: randomInt(10, 500), // граммы
-                    difficulty_level: randomInt(1, 10),
                     download_count: randomInt(0, 500),
                     view_count: randomInt(10, 5000),
                     like_count: 0, // будет обновлено после создания рейтингов
@@ -242,37 +266,98 @@ export const mockUsersSeed = {
                     created_at: randomDate(startDate, endDate),
                 });
 
-                // Добавляем файлы модели
-                await FileModel.create({
-                    model_id: model.id,
-                    file_type_id: 1, // STL
-                    original_filename: `${slug}.stl`,
-                    file_size: randomInt(100000, 50000000),
-                    storage_type_id: s3Storage.id,
-                    storage_path: generateS3Url("models", `${model.id}/${slug}.stl`),
-                    checksum_sha256: Array.from({ length: 64 }, () =>
-                        randomInt(0, 15).toString(16)
-                    ).join(""),
-                    download_count: model.download_count,
-                    is_primary: true,
-                    is_published: true,
-                    uploaded_by: user.id,
-                    updated_at: new Date(),
-                });
+                // Добавляем файлы модели (загружаем реальные файлы в S3)
+                try {
+                    // Путь к файлам
+                    const filesDir = path.join(__dirname, "../../../files/default");
+                    
+                    // Загружаем STL файл
+                    const stlFilePath = path.join(filesDir, "slicehub_ru.stl");
+                    if (fs.existsSync(stlFilePath)) {
+                        const stlBuffer = fs.readFileSync(stlFilePath);
+                        const stlFilename = `${user.id}_slicehub_ru.stl`;
+                        const stlS3Key = `model-${model.id}/${stlFilename}`;
+                        const stlChecksum = crypto.createHash("sha256").update(stlBuffer).digest("hex");
+                        
+                        // Загружаем в S3
+                        await s3StorageService.uploadFile("models", stlS3Key, stlBuffer, "application/octet-stream");
+                        
+                        // Сохраняем в БД
+                        await FileModel.create({
+                            model_id: model.id,
+                            file_type_id: 1, // STL
+                            original_filename: `${slug}.stl`,
+                            file_size: stlBuffer.length,
+                            storage_type_id: s3Storage.id,
+                            storage_path: stlS3Key,
+                            checksum_sha256: stlChecksum,
+                            download_count: 0,
+                            is_primary: true,
+                            is_published: true,
+                            uploaded_by: user.id,
+                            updated_at: new Date(),
+                        });
+                    }
 
-                // Добавляем превью
-                for (let p = 0; p < randomInt(2, 5); p++) {
-                    await PreviewModel.create({
-                        model_id: model.id,
-                        storage_type_id: s3Storage.id,
-                        storage_path: generateS3Url("previews", `${model.id}/preview_${p}.jpg`),
-                        file_size: randomInt(50000, 500000),
-                        mime_type: "image/jpeg",
-                        width: 1920,
-                        height: 1080,
-                        sort_order: p,
-                        uploaded_by: user.id,
-                    });
+                    // Загружаем M3D файл
+                    const m3dFilePath = path.join(filesDir, "slicehub_ru.m3d");
+                    if (fs.existsSync(m3dFilePath)) {
+                        const m3dBuffer = fs.readFileSync(m3dFilePath);
+                        const m3dFilename = `${user.id}_slicehub_ru.m3d`;
+                        const m3dS3Key = `model-${model.id}/${m3dFilename}`;
+                        const m3dChecksum = crypto.createHash("sha256").update(m3dBuffer).digest("hex");
+                        
+                        // Загружаем в S3
+                        await s3StorageService.uploadFile("models", m3dS3Key, m3dBuffer, "application/octet-stream");
+                        
+                        // Сохраняем в БД
+                        await FileModel.create({
+                            model_id: model.id,
+                            file_type_id: 1, // Можно создать отдельный тип для M3D
+                            original_filename: `${slug}.m3d`,
+                            file_size: m3dBuffer.length,
+                            storage_type_id: s3Storage.id,
+                            storage_path: m3dS3Key,
+                            checksum_sha256: m3dChecksum,
+                            download_count: 0,
+                            is_primary: false,
+                            is_published: true,
+                            uploaded_by: user.id,
+                            updated_at: new Date(),
+                        });
+                    }
+                } catch (error) {
+                    syncLogger.error(`Failed to upload files for model ${model.id}: ${error}`);
+                }
+
+                // Добавляем превью (загружаем реальный JPG)
+                try {
+                    const filesDir = path.join(__dirname, "../../../files/default");
+                    const jpgFilePath = path.join(filesDir, "slicehub_ru.jpg");
+                    
+                    if (fs.existsSync(jpgFilePath)) {
+                        const jpgBuffer = fs.readFileSync(jpgFilePath);
+                        const jpgFilename = `${user.id}_slicehub_ru.jpg`;
+                        const jpgS3Key = `model-${model.id}/${jpgFilename}`;
+                        
+                        // Загружаем в S3
+                        await s3StorageService.uploadFile("previews", jpgS3Key, jpgBuffer, "image/jpeg");
+                        
+                        // Сохраняем в БД
+                        await PreviewModel.create({
+                            model_id: model.id,
+                            storage_type_id: s3Storage.id,
+                            storage_path: jpgS3Key,
+                            file_size: jpgBuffer.length,
+                            mime_type: "image/jpeg",
+                            width: 1920,
+                            height: 1080,
+                            sort_order: 0,
+                            uploaded_by: user.id,
+                        });
+                    }
+                } catch (error) {
+                    syncLogger.error(`Failed to upload preview for model ${model.id}: ${error}`);
                 }
 
                 // Добавляем теги (1-4 тега на модель)

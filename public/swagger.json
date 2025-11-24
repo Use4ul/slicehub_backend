@@ -1,0 +1,577 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SliceHub Backend API",
+    "version": "1.0.0",
+    "description": "API для управления 3D моделями и пользователями"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Development server"
+    }
+  ],
+  "tags": [
+    { "name": "3D Models", "description": "API для управления 3D моделями" },
+    { "name": "Model Files", "description": "API для управления файлами моделей (STL, OBJ, etc)" },
+    { "name": "Users", "description": "API для управления пользователями" },
+    { "name": "Comments", "description": "API для комментариев" },
+    { "name": "Collections", "description": "API для коллекций моделей" },
+    { "name": "Categories", "description": "API для категорий" },
+    { "name": "Tags", "description": "API для тегов" }
+  ],
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "user_name": { "type": "string" },
+          "display_name": { "type": "string" },
+          "status_id": { "type": "integer" },
+          "email_verified": { "type": "boolean" },
+          "phone_verified": { "type": "boolean" },
+          "last_login_at": { "type": "string", "format": "date-time" },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ThreeDModel": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "slug": { "type": "string" },
+          "category_id": { "type": "integer" },
+          "user_id": { "type": "string", "format": "uuid" },
+          "is_public": { "type": "boolean" },
+          "print_time_estimate": { "type": "integer", "description": "Estimated print time in minutes" },
+          "download_count": { "type": "integer" },
+          "view_count": { "type": "integer" },
+          "like_count": { "type": "integer" },
+          "is_featured": { "type": "boolean" },
+          "is_draft": { "type": "boolean" },
+          "published_at": { "type": "string", "format": "date-time", "nullable": true },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "FileModel": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "model_id": { "type": "string", "format": "uuid" },
+          "file_type_id": { "type": "integer" },
+          "original_filename": { "type": "string" },
+          "file_size": { "type": "integer", "format": "int64" },
+          "storage_type_id": { "type": "integer" },
+          "storage_path": { "type": "string" },
+          "checksum_sha256": { "type": "string" },
+          "download_count": { "type": "integer" },
+          "is_primary": { "type": "boolean" },
+          "is_published": { "type": "boolean" },
+          "uploaded_by": { "type": "string", "format": "uuid" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "message": "Not found" }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "message": "Validation failed" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Server error",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "message": "Database unavailable" }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/models-3d": {
+      "get": {
+        "summary": "Получить список всех 3D моделей",
+        "tags": ["3D Models"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Количество записей на странице"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "description": "Смещение от начала списка"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список 3D моделей с пагинацией",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "description": "Количество записей в текущем ответе"
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "limit": { "type": "integer" },
+                        "offset": { "type": "integer" },
+                        "total": { "type": "integer", "description": "Общее количество записей в БД" },
+                        "hasMore": { "type": "boolean", "description": "Есть ли еще записи" }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ThreeDModel" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "summary": "Создать новую 3D модель",
+        "tags": ["3D Models"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "description", "category_id", "user_id"],
+                "properties": {
+                  "title": { "type": "string", "example": "Дракон" },
+                  "description": { "type": "string", "example": "Высокодетализированная модель дракона" },
+                  "slug": { "type": "string" },
+                  "category_id": { "type": "integer" },
+                  "user_id": { "type": "string", "format": "uuid" },
+                  "is_public": { "type": "boolean", "default": true },
+                  "print_time_estimate": { "type": "integer" },
+                  "is_draft": { "type": "boolean", "default": true }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Модель успешно создана",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ThreeDModel" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/api/models-3d/{id}": {
+      "get": {
+        "summary": "Получить 3D модель по ID",
+        "tags": ["3D Models"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Информация о 3D модели",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ThreeDModel" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "503": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "summary": "Обновить 3D модель",
+        "tags": ["3D Models"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "is_public": { "type": "boolean" },
+                  "print_time_estimate": { "type": "integer" },
+                  "is_draft": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Модель успешно обновлена",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ThreeDModel" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "400": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "summary": "Удалить 3D модель",
+        "tags": ["3D Models"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Модель успешно удалена" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "400": { "description": "Ошибка при удалении" }
+        }
+      }
+    },
+    "/api/model-files": {
+      "get": {
+        "summary": "Получить все файлы моделей",
+        "tags": ["Model Files"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Количество записей на странице"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "description": "Смещение от начала списка"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список файлов моделей с пагинацией",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": { "type": "integer" },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "limit": { "type": "integer" },
+                        "offset": { "type": "integer" },
+                        "total": { "type": "integer" },
+                        "hasMore": { "type": "boolean" }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/FileModel" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/model-files/{id}": {
+      "get": {
+        "summary": "Получить файл модели по ID",
+        "tags": ["Model Files"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Информация о файле модели",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FileModel" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "503": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/model-files/upload": {
+      "post": {
+        "summary": "Загрузить файл 3D модели",
+        "tags": ["Model Files"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file", "model_id", "file_type_id", "uploaded_by"],
+                "properties": {
+                  "file": { "type": "string", "format": "binary" },
+                  "model_id": { "type": "string", "format": "uuid" },
+                  "file_type_id": { "type": "integer" },
+                  "uploaded_by": { "type": "string", "format": "uuid" },
+                  "is_primary": { "type": "boolean", "default": false }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Файл успешно загружен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "file": { "$ref": "#/components/schemas/FileModel" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/ValidationError" },
+          "404": { "description": "Модель не найдена" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/model-files/{id}/download": {
+      "get": {
+        "summary": "Скачать файл модели",
+        "tags": ["Model Files"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Файл для скачивания",
+            "content": {
+              "application/octet-stream": {
+                "schema": { "type": "string", "format": "binary" }
+              }
+            }
+          },
+          "404": { "description": "Файл не найден" },
+          "400": { "description": "Файл не в S3 хранилище" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/model-files/{id}/download-link": {
+      "get": {
+        "summary": "Получить временную ссылку для скачивания файла",
+        "tags": ["Model Files"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "in": "query",
+            "name": "expires",
+            "schema": { "type": "integer", "default": 3600 },
+            "description": "Время жизни ссылки в секундах"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Временная ссылка на скачивание",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": { "type": "string", "format": "uri" },
+                    "expiresIn": { "type": "integer", "example": 3600 }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Файл не найден" },
+          "400": { "description": "Файл не в S3 хранилище" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "summary": "Получить список всех пользователей",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Количество записей на странице"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0
+            },
+            "description": "Смещение от начала списка"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список пользователей с пагинацией",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": { "type": "integer" },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "limit": { "type": "integer" },
+                        "offset": { "type": "integer" },
+                        "total": { "type": "integer" },
+                        "hasMore": { "type": "boolean" }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/User" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "summary": "Получить пользователя по ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Информация о пользователе",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "503": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  }
+}
+

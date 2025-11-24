@@ -2,6 +2,7 @@ import "reflect-metadata";
 import conf from "./conf.json";
 import * as http from "http";
 import express, { Express } from "express";
+import cors from "cors";
 import { mainLogger } from "./sys/logger";
 import { monitoringRouter, setupCpuMonitoring } from "./src/routes/monitoring";
 import apiRouter from "./src/routes/api";
@@ -21,14 +22,37 @@ const config: Configuration = conf as Configuration;
 
 const app: Express = express();
 const server = http.createServer(app);
-const PORT = config.settings.port || parseInt(process.env.PORT || "3000", 10);
+const PORT = config.settings.port || parseInt(process.env.PORT || "3001", 10);
 
 // Request ID middleware - should be first to track all requests
 app.use(requestIdMiddleware);
 
+// Enable CORS for all routes
+app.use(cors({
+    origin: '*', // В продакшене замените на конкретные домены
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// Request logging middleware for debugging
+app.use((req, res, next) => {
+    const startTime = Date.now();
+    mainLogger.info(`→ ${req.method} ${req.path}`);
+    
+    res.on('finish', () => {
+        const duration = Date.now() - startTime;
+        mainLogger.info(`← ${req.method} ${req.path} - ${res.statusCode} (${duration}ms)`);
+    });
+    
+    next();
+});
+
 // Connect MWs
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files (swagger.json)
+app.use(express.static('public'));
 
 // Mount API router
 app.use("/api", apiRouter);

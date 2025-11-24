@@ -3,13 +3,14 @@ import Models from "../../../../db/sequelize";
 import { ApiErrorMessages as E } from "../errors";
 import { validateBody } from "../validate";
 import { userRoleService } from "../../../services";
+import { formatListResponse } from "../../../utils/response-formatter";
 
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
 	try {
 		const data = await userRoleService.findAll();
-		res.json(data);
+		res.json(formatListResponse(data));
 	} catch (e) {
 		res.status(500).json({ message: E.LIST_FAILED });
 	}

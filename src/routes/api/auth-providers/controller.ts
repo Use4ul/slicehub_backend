@@ -1,13 +1,14 @@
 import { Router, Request, Response } from "express";
 import { ApiErrorMessages as E } from "../errors";
 import { authProviderService } from "../../../services";
+import { formatListResponse } from "../../../utils/response-formatter";
 
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
 	try {
 		const data = await authProviderService.findAll();
-		res.json(data);
+		res.json(formatListResponse(data));
 	} catch {
 		res.status(500).json({ message: E.LIST_FAILED });
 	}
