@@ -7,6 +7,10 @@ export const swaggerSpec = {
   },
   servers: [
     {
+      url: 'https://slicehub.ru',
+      description: 'Production server',
+    },
+    {
       url: 'http://localhost:3001',
       description: 'Development server',
     },
