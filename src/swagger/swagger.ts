@@ -1,5 +1,6 @@
 import swaggerUi from 'swagger-ui-express';
 import { Express } from 'express';
+import { swaggerSpec } from './spec';
 
 export function setupSwagger(app: Express): void {
   // Минимальный CSS - только скрываем топбар
